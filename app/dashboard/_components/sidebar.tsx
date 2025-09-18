@@ -3,12 +3,12 @@
 import UserProfile from "@/components/user-profile";
 import clsx from "clsx";
 import {
-  Banknote,
+  Building,
   HomeIcon,
   LucideIcon,
-  MessageCircleIcon,
+  Search,
   Settings,
-  Upload,
+  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,24 +21,24 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: "Overview",
+    label: "Opportunities",
     href: "/dashboard",
     icon: HomeIcon,
   },
   {
-    label: "Chat",
-    href: "/dashboard/chat",
-    icon: MessageCircleIcon,
+    label: "Suppliers",
+    href: "/dashboard/suppliers",
+    icon: Building,
   },
   {
-    label: "Upload",
-    href: "/dashboard/upload",
-    icon: Upload,
+    label: "Advanced Search",
+    href: "/dashboard/search",
+    icon: Search,
   },
   {
-    label: "Payment Gated",
-    href: "/dashboard/payment",
-    icon: Banknote,
+    label: "Analytics",
+    href: "/dashboard/analytics",
+    icon: TrendingUp,
   },
 ];
 
@@ -55,7 +55,7 @@ export default function DashboardSideBar() {
             className="flex items-center font-semibold hover:cursor-pointer"
             href="/"
           >
-            <span>Nextjs Starter Kit</span>
+            <span>GovBid AI</span>
           </Link>
         </div>
 

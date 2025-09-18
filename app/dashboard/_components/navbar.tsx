@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/sheet";
 import UserProfile from "@/components/user-profile";
 import {
-  Brush,
+  Building,
   HomeIcon,
-  LucideGitBranchPlus,
-  MonitorSmartphone,
+  Search,
+  Settings,
 } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
@@ -32,7 +32,7 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
           <SheetContent side="left">
             <SheetHeader>
               <Link prefetch={true} href="/">
-                <SheetTitle>Pass Builder</SheetTitle>
+                <SheetTitle>GovBid AI</SheetTitle>
               </Link>
             </SheetHeader>
             <div className="flex flex-col space-y-3 mt-[1rem]">
@@ -40,32 +40,32 @@ export default function DashboardTopNav({ children }: { children: ReactNode }) {
                 <Link prefetch={true} href="/dashboard">
                   <Button variant="outline" className="w-full">
                     <HomeIcon className="mr-2 h-4 w-4" />
-                    Overview
+                    Opportunities
                   </Button>
                 </Link>
               </DialogClose>
               <DialogClose asChild>
-                <Link prefetch={true} href="/dashboard/create">
+                <Link prefetch={true} href="/dashboard/suppliers">
                   <Button variant="outline" className="w-full">
-                    <Brush className="mr-2 h-4 w-4" />
-                    Create Pass
+                    <Building className="mr-2 h-4 w-4" />
+                    Suppliers
                   </Button>
                 </Link>
               </DialogClose>
               <DialogClose asChild>
-                <Link prefetch={true} href="/dashboard/notifications">
+                <Link prefetch={true} href="/dashboard/search">
                   <Button variant="outline" className="w-full">
-                    <MonitorSmartphone className="mr-2 h-4 w-4" />
-                    Notifications
+                    <Search className="mr-2 h-4 w-4" />
+                    Advanced Search
                   </Button>
                 </Link>
               </DialogClose>
               <Separator className="my-3" />
               <DialogClose asChild>
-                <Link prefetch={true} href="/dashboard/analytics">
+                <Link prefetch={true} href="/dashboard/settings">
                   <Button variant="outline" className="w-full">
-                    <LucideGitBranchPlus className="mr-2 h-4 w-4" />
-                    Analytics
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
                   </Button>
                 </Link>
               </DialogClose>

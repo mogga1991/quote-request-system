@@ -1,16 +1,16 @@
 ---
-description: Spec Creation Rules for Agent OS
+description: AI-Ready Spec Creation Rules for Agent OS (Claude + Cursor Optimized)
 globs:
 alwaysApply: false
-version: 1.1
+version: 2.0
 encoding: UTF-8
 ---
 
-# Spec Creation Rules
+# Spec Creation Rules (AI Native, Procurement Platform)
 
 ## Overview
 
-Generate detailed feature specifications aligned with product roadmap and mission.
+Generate feature specs in a structure perfect for both human and AI (Claude, Cursor) workflows. Each spec is tightly mapped to the roadmap and product vision, enabling full AI automation of design, coding, and integration steps.
 
 <pre_flight_check>
   EXECUTE: @.agent-os/instructions/meta/pre-flight.md
@@ -20,407 +20,128 @@ Generate detailed feature specifications aligned with product roadmap and missio
 
 <step number="1" subagent="context-fetcher" name="spec_initiation">
 
-### Step 1: Spec Initiation
+### Step 1: Initiate Spec Creation
 
-Use the context-fetcher subagent to identify spec initiation method by either finding the next uncompleted roadmap item when user asks "what's next?" or accepting a specific spec idea from the user.
+Trigger by either:
+- User asks "what's next?" → fetches next incomplete roadmap item.
+- User provides a detailed or short feature idea.
 
-<option_a_flow>
-  <trigger_phrases>
-    - "what's next?"
-  </trigger_phrases>
-  <actions>
-    1. CHECK @.agent-os/product/roadmap.md
-    2. FIND next uncompleted item
-    3. SUGGEST item to user
-    4. WAIT for approval
-  </actions>
-</option_a_flow>
-
-<option_b_flow>
-  <trigger>user describes specific spec idea</trigger>
-  <accept>any format, length, or detail level</accept>
-  <proceed>to context gathering</proceed>
-</option_b_flow>
-
+<actions>
+  - For "what's next?" fetch from `.agent-os/product/roadmap.md`, ask for user confirmation before proceeding.
+  - For new ideas, process any length/format and move to context gathering.
+</actions>
 </step>
 
-<step number="2" subagent="context-fetcher" name="context_gathering">
+<step number="2" subagent="context-fetcher" name="context_alignment">
 
-### Step 2: Context Gathering (Conditional)
+### Step 2: Align Context with Product/Tech Stack
 
-Use the context-fetcher subagent to read @.agent-os/product/mission-lite.md and @.agent-os/product/tech-stack.md only if not already in context to ensure minimal context for spec alignment.
-
-<conditional_logic>
-  IF both mission-lite.md AND tech-stack.md already read in current context:
-    SKIP this entire step
-    PROCEED to step 3
-  ELSE:
-    READ only files not already in context:
-      - mission-lite.md (if not in context)
-      - tech-stack.md (if not in context)
-    CONTINUE with context analysis
-</conditional_logic>
-
-<context_analysis>
-  <mission_lite>core product purpose and value</mission_lite>
-  <tech_stack>technical requirements</tech_stack>
-</context_analysis>
-
+Automatically pull in the latest `.agent-os/product/mission-lite.md` and `.agent-os/product/tech-stack.md` as background knowledge unless already known. This ensures all specs and requirements reflect actual business and architectural constraints.
 </step>
 
-<step number="3" subagent="context-fetcher" name="requirements_clarification">
+<step number="3" subagent="context-fetcher" name="requirements_interview">
 
-### Step 3: Requirements Clarification
+### Step 3: Clarify Requirements & Boundaries
 
-Use the context-fetcher subagent to clarify scope boundaries and technical considerations by asking numbered questions as needed to ensure clear requirements before proceeding.
+Ask specific, numbered questions if needed:
+- What’s in/out of scope?
+- Any explicit technical/UX/integration needs?
+- For procurement: Does this require external API (SAM.gov, LoopNet), RBAC, government compliance, or custom notifications?
 
-<clarification_areas>
-  <scope>
-    - in_scope: what is included
-    - out_of_scope: what is excluded (optional)
-  </scope>
-  <technical>
-    - functionality specifics
-    - UI/UX requirements
-    - integration points
-  </technical>
-</clarification_areas>
-
-<decision_tree>
-  IF clarification_needed:
-    ASK numbered_questions
-    WAIT for_user_response
-  ELSE:
-    PROCEED to_date_determination
-</decision_tree>
-
+If unclear, pause and request clarification.
 </step>
 
 <step number="4" subagent="date-checker" name="date_determination">
 
-### Step 4: Date Determination
+### Step 4: Date Calculation
 
-Use the date-checker subagent to determine the current date in YYYY-MM-DD format for folder naming. The subagent will output today's date which will be used in subsequent steps.
-
-<subagent_output>
-  The date-checker subagent will provide the current date in YYYY-MM-DD format at the end of its response. Store this date for use in folder naming in step 5.
-</subagent_output>
-
+Get today’s date (YYYY-MM-DD); used for organizing the spec folder and maintaining clear history.
 </step>
 
 <step number="5" subagent="file-creator" name="spec_folder_creation">
 
-### Step 5: Spec Folder Creation
+### Step 5: Create Spec Folder
 
-Use the file-creator subagent to create directory: .agent-os/specs/YYYY-MM-DD-spec-name/ using the date from step 4.
-
-Use kebab-case for spec name. Maximum 5 words in name.
-
-<folder_naming>
-  <format>YYYY-MM-DD-spec-name</format>
-  <date>use stored date from step 4</date>
-  <name_constraints>
-    - max_words: 5
-    - style: kebab-case
-    - descriptive: true
-  </name_constraints>
-</folder_naming>
-
-<example_names>
-  - 2025-03-15-password-reset-flow
-  - 2025-03-16-user-profile-dashboard
-  - 2025-03-17-api-rate-limiting
-</example_names>
-
+Create `.agent-os/specs/YYYY-MM-DD-spec-name/`  
+- Spec name = max 5 words, kebab-case, must reflect functional intent (e.g., `supplier-api-bulk-import`)
 </step>
 
-<step number="6" subagent="file-creator" name="create_spec_md">
+<step number="6" subagent="file-creator" name="spec_md_creation">
 
-### Step 6: Create spec.md
+### Step 6: Generate Main Spec Document (spec.md)
 
-Use the file-creator subagent to create the file: .agent-os/specs/YYYY-MM-DD-spec-name/spec.md using this template:
+Use this template:
 
-<file_template>
-  <header>
-    # Spec Requirements Document
+Spec Requirements Document
+Spec: [SPEC_NAME]
+Created: [CURRENT_DATE]
 
-    > Spec: [SPEC_NAME]
-    > Created: [CURRENT_DATE]
-  </header>
-  <required_sections>
-    - Overview
-    - User Stories
-    - Spec Scope
-    - Out of Scope
-    - Expected Deliverable
-  </required_sections>
-</file_template>
+Overview
+[2-3 sentence summary: What problem? For who? Expected outcome.]
 
-<section name="overview">
-  <template>
-    ## Overview
+User Stories
+[USER_TYPE] [Goal]
+As a [USER_TYPE], I want to [DO ACTION], so that [BENEFIT].
+Workflow: [step by step, if needed]
 
-    [1-2_SENTENCE_GOAL_AND_OBJECTIVE]
-  </template>
-  <constraints>
-    - length: 1-2 sentences
-    - content: goal and objective
-  </constraints>
-  <example>
-    Implement a secure password reset functionality that allows users to regain account access through email verification. This feature will reduce support ticket volume and improve user experience by providing self-service account recovery.
-  </example>
-</section>
+In Scope
+[Feature] – [one sentence]
 
-<section name="user_stories">
-  <template>
-    ## User Stories
+...
 
-    ### [STORY_TITLE]
+Out of Scope
+[Functionalities to exclude (for clarity and agent accuracy)]
 
-    As a [USER_TYPE], I want to [ACTION], so that [BENEFIT].
+Acceptance Criteria
+[Browser-testable or deployable outcome]
 
-    [DETAILED_WORKFLOW_DESCRIPTION]
-  </template>
-  <constraints>
-    - count: 1-3 stories
-    - include: workflow and problem solved
-    - format: title + story + details
-  </constraints>
-</section>
+[API or data contract verification]
 
-<section name="spec_scope">
-  <template>
-    ## Spec Scope
-
-    1. **[FEATURE_NAME]** - [ONE_SENTENCE_DESCRIPTION]
-    2. **[FEATURE_NAME]** - [ONE_SENTENCE_DESCRIPTION]
-  </template>
-  <constraints>
-    - count: 1-5 features
-    - format: numbered list
-    - description: one sentence each
-  </constraints>
-</section>
-
-<section name="out_of_scope">
-  <template>
-    ## Out of Scope
-
-    - [EXCLUDED_FUNCTIONALITY_1]
-    - [EXCLUDED_FUNCTIONALITY_2]
-  </template>
-  <purpose>explicitly exclude functionalities</purpose>
-</section>
-
-<section name="expected_deliverable">
-  <template>
-    ## Expected Deliverable
-
-    1. [TESTABLE_OUTCOME_1]
-    2. [TESTABLE_OUTCOME_2]
-  </template>
-  <constraints>
-    - count: 1-3 expectations
-    - focus: browser-testable outcomes
-  </constraints>
-</section>
-
+text
 </step>
 
-<step number="7" subagent="file-creator" name="create_spec_lite_md">
+<step number="7" subagent="file-creator" name="spec_lite_md">
 
-### Step 7: Create spec-lite.md
+### Step 7: Generate Spec Lite (spec-lite.md)
 
-Use the file-creator subagent to create the file: .agent-os/specs/YYYY-MM-DD-spec-name/spec-lite.md for the purpose of establishing a condensed spec for efficient AI context usage.
-
-<file_template>
-  <header>
-    # Spec Summary (Lite)
-  </header>
-</file_template>
-
-<content_structure>
-  <spec_summary>
-    - source: Step 6 spec.md overview section
-    - length: 1-3 sentences
-    - content: core goal and objective of the feature
-  </spec_summary>
-</content_structure>
-
-<content_template>
-  [1-3_SENTENCES_SUMMARIZING_SPEC_GOAL_AND_OBJECTIVE]
-</content_template>
-
-<example>
-  Implement secure password reset via email verification to reduce support tickets and enable self-service account recovery. Users can request a reset link, receive a time-limited token via email, and set a new password following security best practices.
-</example>
-
+Create a 1-3 sentence ultra-condensed summary for AI agents to load as fast context before coding.
 </step>
 
-<step number="8" subagent="file-creator" name="create_technical_spec">
+<step number="8" subagent="file-creator" name="technical_spec_md">
 
-### Step 8: Create Technical Specification
+### Step 8: Generate Technical Specification (sub-specs/technical-spec.md)
 
-Use the file-creator subagent to create the file: sub-specs/technical-spec.md using this template:
-
-<file_template>
-  <header>
-    # Technical Specification
-
-    This is the technical specification for the spec detailed in @.agent-os/specs/YYYY-MM-DD-spec-name/spec.md
-  </header>
-</file_template>
-
-<spec_sections>
-  <technical_requirements>
-    - functionality details
-    - UI/UX specifications
-    - integration requirements
-    - performance criteria
-  </technical_requirements>
-  <external_dependencies_conditional>
-    - only include if new dependencies needed
-    - new libraries/packages
-    - justification for each
-    - version requirements
-  </external_dependencies_conditional>
-</spec_sections>
-
-<example_template>
-  ## Technical Requirements
-
-  - [SPECIFIC_TECHNICAL_REQUIREMENT]
-  - [SPECIFIC_TECHNICAL_REQUIREMENT]
-
-  ## External Dependencies (Conditional)
-
-  [ONLY_IF_NEW_DEPENDENCIES_NEEDED]
-  - **[LIBRARY_NAME]** - [PURPOSE]
-  - **Justification:** [REASON_FOR_INCLUSION]
-</example_template>
-
-<conditional_logic>
-  IF spec_requires_new_external_dependencies:
-    INCLUDE "External Dependencies" section
-  ELSE:
-    OMIT section entirely
-</conditional_logic>
-
+Sections:
+- **Technical Requirements**: Exact tech/infra details, UX/UI, and implementation hints (e.g., "must use Next.js app router", or "Supabase RLS for RBAC").
+- **External Dependencies**: Only if new dependencies; always justify with reason and version requirement.
 </step>
 
-<step number="9" subagent="file-creator" name="create_database_schema">
+<step number="9" subagent="file-creator" name="database_schema_md">
 
-### Step 9: Create Database Schema (Conditional)
+### Step 9: (Conditional) Generate Database Schema (sub-specs/database-schema.md)
 
-Use the file-creator subagent to create the file: sub-specs/database-schema.md ONLY IF database changes needed for this task.
-
-<decision_tree>
-  IF spec_requires_database_changes:
-    CREATE sub-specs/database-schema.md
-  ELSE:
-    SKIP this_step
-</decision_tree>
-
-<file_template>
-  <header>
-    # Database Schema
-
-    This is the database schema implementation for the spec detailed in @.agent-os/specs/YYYY-MM-DD-spec-name/spec.md
-  </header>
-</file_template>
-
-<schema_sections>
-  <changes>
-    - new tables
-    - new columns
-    - modifications
-    - migrations
-  </changes>
-  <specifications>
-    - exact SQL or migration syntax
-    - indexes and constraints
-    - foreign key relationships
-  </specifications>
-  <rationale>
-    - reason for each change
-    - performance considerations
-    - data integrity rules
-  </rationale>
-</schema_sections>
-
+- ONLY if schema/migrations/db changes needed.
+- Direct SQL, ORM, or migration scripts plus explanation.
 </step>
 
-<step number="10" subagent="file-creator" name="create_api_spec">
+<step number="10" subagent="file-creator" name="api_spec_md">
 
-### Step 10: Create API Specification (Conditional)
+### Step 10: (Conditional) Generate API Specification (sub-specs/api-spec.md)
 
-Use the file-creator subagent to create file: sub-specs/api-spec.md ONLY IF API changes needed.
-
-<decision_tree>
-  IF spec_requires_api_changes:
-    CREATE sub-specs/api-spec.md
-  ELSE:
-    SKIP this_step
-</decision_tree>
-
-<file_template>
-  <header>
-    # API Specification
-
-    This is the API specification for the spec detailed in @.agent-os/specs/YYYY-MM-DD-spec-name/spec.md
-  </header>
-</file_template>
-
-<api_sections>
-  <routes>
-    - HTTP method
-    - endpoint path
-    - parameters
-    - response format
-  </routes>
-  <controllers>
-    - action names
-    - business logic
-    - error handling
-  </controllers>
-  <purpose>
-    - endpoint rationale
-    - integration with features
-  </purpose>
-</api_sections>
-
-<endpoint_template>
-  ## Endpoints
-
-  ### [HTTP_METHOD] [ENDPOINT_PATH]
-
-  **Purpose:** [DESCRIPTION]
-  **Parameters:** [LIST]
-  **Response:** [FORMAT]
-  **Errors:** [POSSIBLE_ERRORS]
-</endpoint_template>
-
+- ONLY if new APIs/endpoints/controllers are needed.
+- List each: method, path, body, params, response logic, error handling.
 </step>
 
 <step number="11" name="user_review">
 
 ### Step 11: User Review
 
-Request user review of spec.md and all sub-specs files, waiting for approval or revision requests.
+Summarize in chat:
+- Full path to all generated spec files
+- Quick summary of what was specified
+Ask user to review and confirm before moving on to task breakdown.
 
-<review_request>
-  I've created the spec documentation:
-
-  - Spec Requirements: @.agent-os/specs/YYYY-MM-DD-spec-name/spec.md
-  - Spec Summary: @.agent-os/specs/YYYY-MM-DD-spec-name/spec-lite.md
-  - Technical Spec: @.agent-os/specs/YYYY-MM-DD-spec-name/sub-specs/technical-spec.md
-  [LIST_OTHER_CREATED_SPECS]
-
-  Please review and let me know if any changes are needed.
-
-  When you're ready, run the /create-tasks command to have me build the tasks checklist from this spec.
-</review_request>
-
+_Next step: Run `/create-tasks` after approval to convert this spec into a concrete build checklist._
 </step>
 
 </process_flow>

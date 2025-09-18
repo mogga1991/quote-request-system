@@ -1,8 +1,11 @@
-# Code Style Guide
+# Code Style Guide (Agent OS / Modern SaaS, AI Team)
 
 ## Context
 
-Global code style rules for Agent OS projects.
+Universal formatting and naming rules for all code (backend, frontend, scripts) in Agent OS projects.
+*Agents and humans: always load "General Formatting" once per session/context, then refer dynamically to specific file-type/tech guides below as needed.*
+
+---
 
 <conditional-block context-check="general-formatting">
 IF this General Formatting section already read in current context:
@@ -10,32 +13,34 @@ IF this General Formatting section already read in current context:
   NOTE: "Using General Formatting rules already in context"
 ELSE:
   READ: The following formatting rules
+</conditional-block>
 
 ## General Formatting
 
-### Indentation
-- Use 2 spaces for indentation (never tabs)
-- Maintain consistent indentation throughout files
-- Align nested structures for readability
+### Indentation & Structure
+- **2 spaces** for indentation (never tabs)
+- Keep whitespace and line breaks clean and consistent
+- Nested blocks/objects aligned for scan/read clarity
 
 ### Naming Conventions
-- **Methods and Variables**: Use snake_case (e.g., `user_profile`, `calculate_total`)
-- **Classes and Modules**: Use PascalCase (e.g., `UserProfile`, `PaymentProcessor`)
-- **Constants**: Use UPPER_SNAKE_CASE (e.g., `MAX_RETRY_COUNT`)
+- **Variables & Functions:** Use **camelCase** (JavaScript/TypeScript/React/Next) or **snake_case** (Python, configs, legacy). Never f1_var or all-caps unless constant.
+- **Classes, Enums, Modules:** Use **PascalCase** (e.g. `UserController`, `OrderBatch`)
+- **Constants:** **UPPER_SNAKE_CASE** (e.g. `MAX_FETCH_RETRIES`)
+- **React Components:** `PascalCase` filenames, one per file
+- **Files/Folders:** Use kebab-case (`user-profile-card.tsx`) except in frameworks that require PascalCase by convention
 
-### String Formatting
-- Use single quotes for strings: `'Hello World'`
-- Use double quotes only when interpolation is needed
-- Use template literals for multi-line strings or complex interpolation
+### String & Template Formatting
+- Always use **single quotes** (`' '`) for string literals in JS/TS; double quotes (`" "`) only for HTML, JSX, GraphQL, or if interpolating.
+- Use **template literals** for multi-line or interpolated strings.
+- **No inline SQL/HTML unless in test, migration, or template context**.
 
-### Code Comments
-- Add brief comments above non-obvious business logic
-- Document complex algorithms or calculations
-- Explain the "why" behind implementation choices
-- Never remove existing comments unless removing the associated code
-- Update comments when modifying code to maintain accuracy
-- Keep comments concise and relevant
-</conditional-block>
+### Code Comments & Documentation
+- Document “why” above any non-obvious business, technical, or workaround code (never just “what” if code says it)
+- Always update or remove stale comments alongside code changes.
+- Use JSDoc or docstring comments for all exported/public functions, components, models, or agent workflows.
+- **Never remove existing comments unless removing the actual code block.**
+
+---
 
 <conditional-block task-condition="html-css-tailwind" context-check="html-css-style">
 IF current task involves writing or updating HTML, CSS, or TailwindCSS:
@@ -59,7 +64,7 @@ ELSE:
 </conditional-block>
 
 <conditional-block task-condition="javascript" context-check="javascript-style">
-IF current task involves writing or updating JavaScript:
+IF current task involves writing or updating JavaScript/TypeScript:
   IF javascript-style.md already in context:
     SKIP: Re-reading this file
     NOTE: "Using JavaScript style guide already in context"
@@ -75,3 +80,15 @@ IF current task involves writing or updating JavaScript:
 ELSE:
   SKIP: JavaScript style guide not relevant to current task
 </conditional-block>
+
+---
+
+## Agent/AI-Specific Rules
+
+- At the start of each context/session, **load only the sections relevant to current file or implementation type** (avoid context overload).
+- If unsure, **default to strictest discipline (e.g. always format, always comment why, always test)**
+- When in doubt, ask for clarification or provide options, never guess at code style.
+
+---
+
+**Strict following of these patterns ensures clarity, consistency, and zero merge confusion for all agent/human contributors.**

@@ -1,21 +1,20 @@
 ---
-description: Rules to execute a task and its sub-tasks using Agent OS
+description: Step-by-Step Task Execution Rules for Agent OS (Claude & Cursor Optimized)
 globs:
 alwaysApply: false
-version: 1.0
+version: 2.0
 encoding: UTF-8
 ---
 
-# Task Execution Rules
+# Task Execution Rules (AI/TDD Native)
 
 ## Overview
 
-Execute a specific task along with its sub-tasks systematically following a TDD development workflow.
+Use this rule set to reliably execute any task and its sub-tasks from tasks.md. Always run TDD, apply best practices, and make each agent or dev step atomic, reviewable, and traceable.
 
 <pre_flight_check>
   EXECUTE: @.agent-os/instructions/meta/pre-flight.md
 </pre_flight_check>
-
 
 <process_flow>
 
@@ -23,235 +22,102 @@ Execute a specific task along with its sub-tasks systematically following a TDD 
 
 ### Step 1: Task Understanding
 
-Read and analyze the given parent task and all its sub-tasks from tasks.md to gain complete understanding of what needs to be built.
-
-<task_analysis>
-  <read_from_tasks_md>
-    - Parent task description
-    - All sub-task descriptions
-    - Task dependencies
-    - Expected outcomes
-  </read_from_tasks_md>
-</task_analysis>
+Read and analyze the chosen parent task and all its subtasks (from tasks.md). Analyze dependencies, clarify “done,” and verify test requirements for each substep.
 
 <instructions>
-  ACTION: Read the specific parent task and all its sub-tasks
-  ANALYZE: Full scope of implementation required
-  UNDERSTAND: Dependencies and expected deliverables
-  NOTE: Test requirements for each sub-task
+  - **ACTION:** Read both the parent and all nested subtasks
+  - **ANALYZE:** Implementation boundaries and ordering
+  - **UNDERSTAND:** Any dependency on earlier tasks or upstream components
+  - **NOTE:** All testing expectations
 </instructions>
 
 </step>
 
 <step number="2" name="technical_spec_review">
 
-### Step 2: Technical Specification Review
+### Step 2: Review Related Technical Specs
 
-Search and extract relevant sections from technical-spec.md to understand the technical implementation approach for this task.
-
-<selective_reading>
-  <search_technical_spec>
-    FIND sections in technical-spec.md related to:
-    - Current task functionality
-    - Implementation approach for this feature
-    - Integration requirements
-    - Performance criteria
-  </search_technical_spec>
-</selective_reading>
+Open technical-spec.md (for this spec folder). Select only the information relevant for the current task. Ignore unrelated details for rapid focus.
 
 <instructions>
-  ACTION: Search technical-spec.md for task-relevant sections
-  EXTRACT: Only implementation details for current task
-  SKIP: Unrelated technical specifications
-  FOCUS: Technical approach for this specific feature
+  - **ACTION:** Extract tech, integration, and UX details just for this task
+  - **SKIP:** Ignore unrelated sections to reduce context bloat
+  - **APPLY:** Implementation hints, dependency notes, integration points
 </instructions>
 
 </step>
 
-<step number="3" subagent="context-fetcher" name="best_practices_review">
+<step number="3" name="review_best_practices_and_style">
 
-### Step 3: Best Practices Review
+### Step 3: Best Practices & Code Style Alignment
 
-Use the context-fetcher subagent to retrieve relevant sections from @.agent-os/standards/best-practices.md that apply to the current task's technology stack and feature type.
-
-<selective_reading>
-  <search_best_practices>
-    FIND sections relevant to:
-    - Task's technology stack
-    - Feature type being implemented
-    - Testing approaches needed
-    - Code organization patterns
-  </search_best_practices>
-</selective_reading>
+Query both best-practices.md and code-style.md for just what's relevant (tech stack, feature type, and language).  
+- *Example:* “For a Next.js API endpoint that touches Supabase, what are the error handling/async and RLS/RBAC patterns required?”
 
 <instructions>
-  ACTION: Use context-fetcher subagent
-  REQUEST: "Find best practices sections relevant to:
-            - Task's technology stack: [CURRENT_TECH]
-            - Feature type: [CURRENT_FEATURE_TYPE]
-            - Testing approaches needed
-            - Code organization patterns"
-  PROCESS: Returned best practices
-  APPLY: Relevant patterns to implementation
+  - **ACTION:** Extract and summarize only pertinent practices
+  - **APPLY:** To this task’s code, tests, and file structure
 </instructions>
 
 </step>
 
-<step number="4" subagent="context-fetcher" name="code_style_review">
+<step number="4" name="task_execution_tdd_loop">
 
-### Step 4: Code Style Review
+### Step 4: Execute Task with TDD (Test-Driven Development) Loop
 
-Use the context-fetcher subagent to retrieve relevant code style rules from @.agent-os/standards/code-style.md for the languages and file types being used in this task.
+Perform subtasks exactly in order. For most tasks:
+- First: Write all relevant tests (unit/integration/E2E, as fits the scope)
+- Middle: Implement or refactor; keep all tests passing
+- Last: Verify all tests pass for only this scope
 
-<selective_reading>
-  <search_code_style>
-    FIND style rules for:
-    - Languages used in this task
-    - File types being modified
-    - Component patterns being implemented
-    - Testing style guidelines
-  </search_code_style>
-</selective_reading>
+For each subtask:
+- Complete, then mark `[x]` in tasks.md (immediately after finishing)
+- If a blocking issue cannot be solved after 3 attempts, record as "⚠️" and mark incomplete
+
+<typical_loop>
+  - [ ] 1.1 Write/extend tests for [feature]
+  - [ ] 1.2 Implement feature or sub-feature
+  - [ ] 1.3 Refactor (if necessary, keep tests green)
+  - [ ] 1.4 Verify all tests pass
+</typical_loop>
 
 <instructions>
-  ACTION: Use context-fetcher subagent
-  REQUEST: "Find code style rules for:
-            - Languages: [LANGUAGES_IN_TASK]
-            - File types: [FILE_TYPES_BEING_MODIFIED]
-            - Component patterns: [PATTERNS_BEING_IMPLEMENTED]
-            - Testing style guidelines"
-  PROCESS: Returned style rules
-  APPLY: Relevant formatting and patterns
+  - **ACTION:** DO NOT move to next subtask until the previous is fully completed or blocked
+  - **TDD:** Always run failed-first, then make green, then refactor if possible
+  - **BLOCKS:** If blocked, attempt a max of 3 approaches, then stop + record the blocking reason
 </instructions>
 
 </step>
 
-<step number="5" name="task_execution">
+<step number="5" name="targeted_test_run">
 
-### Step 5: Task and Sub-task Execution
+### Step 5: Targeted Test Run
 
-Execute the parent task and all sub-tasks in order using test-driven development (TDD) approach.
-
-<typical_task_structure>
-  <first_subtask>Write tests for [feature]</first_subtask>
-  <middle_subtasks>Implementation steps</middle_subtasks>
-  <final_subtask>Verify all tests pass</final_subtask>
-</typical_task_structure>
-
-<execution_order>
-  <subtask_1_tests>
-    IF sub-task 1 is "Write tests for [feature]":
-      - Write all tests for the parent feature
-      - Include unit tests, integration tests, edge cases
-      - Run tests to ensure they fail appropriately
-      - Mark sub-task 1 complete
-  </subtask_1_tests>
-
-  <middle_subtasks_implementation>
-    FOR each implementation sub-task (2 through n-1):
-      - Implement the specific functionality
-      - Make relevant tests pass
-      - Update any adjacent/related tests if needed
-      - Refactor while keeping tests green
-      - Mark sub-task complete
-  </middle_subtasks_implementation>
-
-  <final_subtask_verification>
-    IF final sub-task is "Verify all tests pass":
-      - Run entire test suite
-      - Fix any remaining failures
-      - Ensure no regressions
-      - Mark final sub-task complete
-  </final_subtask_verification>
-</execution_order>
-
-<test_management>
-  <new_tests>
-    - Written in first sub-task
-    - Cover all aspects of parent feature
-    - Include edge cases and error handling
-  </new_tests>
-  <test_updates>
-    - Made during implementation sub-tasks
-    - Update expectations for changed behavior
-    - Maintain backward compatibility
-  </test_updates>
-</test_management>
+Trigger only the tests specifically covering this parent task/component. Ignore unrelated folders/files.
 
 <instructions>
-  ACTION: Execute sub-tasks in their defined order
-  RECOGNIZE: First sub-task typically writes all tests
-  IMPLEMENT: Middle sub-tasks build functionality
-  VERIFY: Final sub-task ensures all tests pass
-  UPDATE: Mark each sub-task complete as finished
+  - **RUN:** All new/updated tests related to this implementation
+  - **DEBUG:** Fix any failures, iterate until green for this scope
+  - **CONFIRM:** 100% pass rate before proceeding
 </instructions>
 
 </step>
 
-<step number="6" subagent="test-runner" name="task_test_verification">
+<step number="6" name="status_and_completion_update">
 
-### Step 6: Task-Specific Test Verification
+### Step 6: Status, Completion, and Blocking
 
-Use the test-runner subagent to run and verify only the tests specific to this parent task (not the full test suite) to ensure the feature is working correctly.
-
-<focused_test_execution>
-  <run_only>
-    - All new tests written for this parent task
-    - All tests updated during this task
-    - Tests directly related to this feature
-  </run_only>
-  <skip>
-    - Full test suite (done later in execute-tasks.md)
-    - Unrelated test files
-  </skip>
-</focused_test_execution>
-
-<final_verification>
-  IF any test failures:
-    - Debug and fix the specific issue
-    - Re-run only the failed tests
-  ELSE:
-    - Confirm all task tests passing
-    - Ready to proceed
-</final_verification>
+Immediately update tasks.md:
+- `[x]` for completed steps
+- `[ ]` with ⚠️ and explanation for blocked (after 3 failed efforts)
+- Debrief summary:
+  - What was achieved
+  - Any partials/blockers (with fix suggestion if available)
+  - Next task IDs to queue
 
 <instructions>
-  ACTION: Use test-runner subagent
-  REQUEST: "Run tests for [this parent task's test files]"
-  WAIT: For test-runner analysis
-  PROCESS: Returned failure information
-  VERIFY: 100% pass rate for task-specific tests
-  CONFIRM: This feature's tests are complete
-</instructions>
-
-</step>
-
-<step number="7" name="task_status_updates">
-
-### Step 7: Mark this task and sub-tasks complete
-
-IMPORTANT: In the tasks.md file, mark this task and its sub-tasks complete by updating each task checkbox to [x].
-
-<update_format>
-  <completed>- [x] Task description</completed>
-  <incomplete>- [ ] Task description</incomplete>
-  <blocked>
-    - [ ] Task description
-    ⚠️ Blocking issue: [DESCRIPTION]
-  </blocked>
-</update_format>
-
-<blocking_criteria>
-  <attempts>maximum 3 different approaches</attempts>
-  <action>document blocking issue</action>
-  <emoji>⚠️</emoji>
-</blocking_criteria>
-
-<instructions>
-  ACTION: Update tasks.md after each task completion
-  MARK: [x] for completed items immediately
-  DOCUMENT: Blocking issues with ⚠️ emoji
-  LIMIT: 3 attempts before marking as blocked
+  - **ACTION:** Always update in place after each step
+  - **SUMMARY:** Provide in prompt (for both user and agent next steps)
 </instructions>
 
 </step>

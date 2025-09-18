@@ -1,16 +1,16 @@
 ---
-description: Analyze Current Product & Install Agent OS
+description: Analyze Current Product & Install Agent OS (Claude/Cursor optimized)
 globs:
 alwaysApply: false
-version: 1.0
+version: 1.1
 encoding: UTF-8
 ---
 
-# Analyze Current Product & Install Agent OS
+# Analyze Current Product & Install Agent OS (Claude/Cursor)
 
 ## Overview
 
-Install Agent OS into an existing codebase, analyze current product state and progress.  Builds on plan-product.md
+Install Agent OS into an existing codebase, analyze current product state, gather deep business and technical context. This process ensures Claude (in Cursor or other AI tools) can always generate specs/tasks in sync with your actual architecture and roadmap.
 
 <pre_flight_check>
   EXECUTE: @.agent-os/instructions/meta/pre-flight.md
@@ -20,194 +20,162 @@ Install Agent OS into an existing codebase, analyze current product state and pr
 
 <step number="1" name="analyze_existing_codebase">
 
-### Step 1: Analyze Existing Codebase
+### Step 1: Analyze Existing Codebase (AI/Claude-First)
 
-Perform a deep codebase analysis of the current codebase to understand current state before documentation purposes.
+Run a full codebase scan and context assessment, with extra attention to:
+  - SaaS conventions, .agent-os usage, code style, and Next.js/Supabase idioms
+  - Directory patterns (App Router, lib/hooks/db separation)
+  - Modern infra (Neon, Vercel, API keys, Cursor automation hooks if present)
 
 <analysis_areas>
   <project_structure>
-    - Directory organization
-    - File naming patterns
-    - Module structure
-    - Build configuration
+    - Directory and file structure (incl. .agent-os, app, db, hooks)
+    - App/feature boundaries
+    - Build and deployment configuration (Vercel, .env, etc.)
   </project_structure>
   <technology_stack>
-    - Frameworks in use
-    - Dependencies (package.json, Gemfile, requirements.txt, etc.)
-    - Database systems
-    - Infrastructure configuration
+    - Frameworks (Next.js version, React version, Supabase/Drizzle/Neon presence)
+    - All dependencies (from package manager lockfiles)
+    - Auth/payment providers (e.g., Supabase, Stripe)
+    - Infra setup and integration points (Vercel, workflow automations)
   </technology_stack>
   <implementation_progress>
-    - Completed features
-    - Work in progress
-    - Authentication/authorization state
-    - API endpoints
-    - Database schema
+    - Completed vs. in-progress features
+    - Authz state, API endpoints, and 3rd-party integrations
+    - Database schema and migrations
   </implementation_progress>
   <code_patterns>
-    - Coding style in use
-    - Naming conventions
-    - File organization patterns
-    - Testing approach
+    - Coding style: indicate if .agent-os/standards used (else infer from code)
+    - Naming and organization conventions, test integration (if any)
+    - Any AI agent custom workflows or folders (for Claude/Cursor compatibility)
   </code_patterns>
 </analysis_areas>
 
 <instructions>
-  ACTION: Thoroughly analyze the existing codebase
-  DOCUMENT: Current technologies, features, and patterns
-  IDENTIFY: Architectural decisions already made
-  NOTE: Development progress and completed work
+  ACTION: Claude, run a deep analysis (favor SaaS/AI idioms). Note anything agent-specific (e.g., Cursor hooks).
+  DOCUMENT: Detected tech stack, patterns, folder structure, and feature coverage.
+  IDENTIFY: Work completed, major decisions, and where AI can plug in for automation.
+  NOTE: Custom AI-related plumbing/workflows, if present.
 </instructions>
 
 </step>
 
 <step number="2" subagent="context-fetcher" name="gather_product_context">
 
-### Step 2: Gather Product Context
+### Step 2: Confirm/Collect Product Context
 
-Use the context-fetcher subagent to supplement codebase analysis with business context and future plans.
+Prompt the user for any missing high-level details or team preferences. Always prefer explicit user vision if provided.
 
 <context_questions>
-  Based on my analysis of your codebase, I can see you're building [OBSERVED_PRODUCT_TYPE].
+  Based on code analysis, I recognize an AI-enabled procurement/contracting platform.
 
-  To properly set up Agent OS, I need to understand:
-
-  1. **Product Vision**: What problem does this solve? Who are the target users?
-
-  2. **Current State**: Are there features I should know about that aren't obvious from the code?
-
-  3. **Roadmap**: What features are planned next? Any major refactoring planned?
-
-  4. **Team Preferences**: Any coding standards or practices the team follows that I should capture?
+  Please clarify or confirm:
+  1. **Product Vision**: (summarize, or ask: "What procurement pain do you solve? Who uses the product?")
+  2. **Integrations**: Any APIs to include (SAM.gov, LoopNet, etc) that aren't obvious in codebase?
+  3. **Roadmap**: Major features planned, or refactor goals.
+  4. **Team/AI Agent Preferences**: Coding standards, review process, or AI plugin needs (e.g., Cursor custom commands)?
 </context_questions>
 
 <instructions>
-  ACTION: Ask user for product context
-  COMBINE: Merge user input with codebase analysis
-  PREPARE: Information for plan-product.md execution
+  ACTION: Claude, prompt user directly and merge their answers with findings above.
+  INTEGRATE: Blend user-provided context, code findings, and roadmap.
+  PREPARE: Unified summary for phase 3.
 </instructions>
 
 </step>
 
 <step number="3" name="execute_plan_product">
 
-### Step 3: Execute Plan-Product with Context
+### Step 3: Generate/Update Product Layer
 
-Execute our standard flow for installing Agent OS in existing products
+Feed all technical and product context into `plan-product.md` flow. This ensures `.agent-os/product/` always matches reality—critical for accurate AI-driven workflows.
 
 <execution_parameters>
-  <main_idea>[DERIVED_FROM_ANALYSIS_AND_USER_INPUT]</main_idea>
-  <key_features>[IDENTIFIED_IMPLEMENTED_AND_PLANNED_FEATURES]</key_features>
-  <target_users>[FROM_USER_CONTEXT]</target_users>
-  <tech_stack>[DETECTED_FROM_CODEBASE]</tech_stack>
+  <main_idea>[USER CONFIRMED VISION + CODE ANALYSIS]</main_idea>
+  <key_features>[IMPL + PLANNED FROM ANALYSIS AND USER]</key_features>
+  <target_users>[AS CONFIRMED/UPDATED BY USER]</target_users>
+  <tech_stack>[FULL, WITH VERSIONS/DEPLOYMENT]</tech_stack>
 </execution_parameters>
 
 <execution_prompt>
   @.agent-os/instructions/core/plan-product.md
 
-  I'm installing Agent OS into an existing product. Here's what I've gathered:
+  Installing Agent OS into existing AI Sourcing Platform.
 
-  **Main Idea**: [SUMMARY_FROM_ANALYSIS_AND_CONTEXT]
-
-  **Key Features**:
-  - Already Implemented: [LIST_FROM_ANALYSIS]
-  - Planned: [LIST_FROM_USER]
-
-  **Target Users**: [FROM_USER_RESPONSE]
-
-  **Tech Stack**: [DETECTED_STACK_WITH_VERSIONS]
+  Product vision: [as above]
+  Key features completed: [list]
+  Up next / roadmap: [list]
+  Tech stack: [detailed]
+  User/team custom preferences: [notes]
 </execution_prompt>
 
 <instructions>
-  ACTION: Execute plan-product.md with gathered information
-  PROVIDE: All context as structured input
-  ALLOW: plan-product.md to create .agent-os/product/ structure
+  ACTION: Run plan-product.md using unified summary/context.
+  VERIFY: `.agent-os/product/` aligns to codebase and roadmap.
 </instructions>
 
 </step>
 
 <step number="4" name="customize_generated_files">
 
-### Step 4: Customize Generated Documentation
+### Step 4: Finalize Product/Roadmap Layer
 
-Refine the generated documentation to ensure accuracy for the existing product by updating roadmap, tech stack, and decisions based on actual implementation.
+Validate/adjust the generated docs to reflect actual implementation details and agent automation hooks.
 
 <customization_tasks>
   <roadmap_adjustment>
-    - Mark completed features as done
-    - Move implemented items to "Phase 0: Already Completed"
-    - Adjust future phases based on actual progress
+    - Add done features to Phase 0
+    - Move what's shipping/-WIP to Current
+    - Document future phases by actual product direction
   </roadmap_adjustment>
   <tech_stack_verification>
-    - Verify detected versions are correct
-    - Add any missing infrastructure details
-    - Document actual deployment setup
+    - Detail stack (frameworks, DB, auth, infra)
+    - Flag any missing API or workflow integrations
+    - Note dev vs. prod tooling differences
   </tech_stack_verification>
 </customization_tasks>
 
 <roadmap_template>
-  ## Phase 0: Already Completed
+  ## Phase 0: Done
+  - [x] [COMPLETE_1]
+  - [x] [COMPLETE_2]
 
-  The following features have been implemented:
+  ## Phase 1: WIP
+  - [ ] [IN_PROGRESS_1]
 
-  - [x] [FEATURE_1] - [DESCRIPTION_FROM_CODE]
-  - [x] [FEATURE_2] - [DESCRIPTION_FROM_CODE]
-  - [x] [FEATURE_3] - [DESCRIPTION_FROM_CODE]
-
-  ## Phase 1: Current Development
-
-  - [ ] [IN_PROGRESS_FEATURE] - [DESCRIPTION]
-
-  [CONTINUE_WITH_STANDARD_PHASES]
+  ## Future
+  - [ ] [FUTURE_FEATURE]
 </roadmap_template>
-
 
 </step>
 
 <step number="5" name="final_verification">
 
-### Step 5: Final Verification and Summary
+### Step 5: Completion & Agent OS Ready Check
 
-Verify installation completeness and provide clear next steps for the user to start using Agent OS with their existing codebase.
+Confirm readiness of Agent OS and product instructions for AI agent workflows. Output checklist and next actions for the user.
 
 <verification_checklist>
-  - [ ] .agent-os/product/ directory created
-  - [ ] All product documentation reflects actual codebase
-  - [ ] Roadmap shows completed and planned features accurately
-  - [ ] Tech stack matches installed dependencies
+  - [ ] `.agent-os/product/` exists and matches codebase
+  - [ ] Docs show real stack, features, and user goals
+  - [ ] Roadmap and phases up to date
+  - [ ] Standards and custom AI patterns present if needed
 </verification_checklist>
 
 <summary_template>
-  ## ✅ Agent OS Successfully Installed
+  ## ✅ Agent OS Initialized (Claude/Cursor Ready)
 
-  I've analyzed your [PRODUCT_TYPE] codebase and set up Agent OS with documentation that reflects your actual implementation.
+  Your codebase and context are now fully documented for Claude/AI workflows.
 
-  ### What I Found
-
-  - **Tech Stack**: [SUMMARY_OF_DETECTED_STACK]
-  - **Completed Features**: [COUNT] features already implemented
-  - **Code Style**: [DETECTED_PATTERNS]
-  - **Current Phase**: [IDENTIFIED_DEVELOPMENT_STAGE]
-
-  ### What Was Created
-
-  - ✓ Product documentation in `.agent-os/product/`
-  - ✓ Roadmap with completed work in Phase 0
-  - ✓ Tech stack reflecting actual dependencies
-
-  ### Next Steps
-
-  1. Review the generated documentation in `.agent-os/product/`
-  2. Make any necessary adjustments to reflect your vision
-  3. See the Agent OS README for usage instructions: https://github.com/buildermethods/agent-os
-  4. Start using Agent OS for your next feature:
-     ```
-     @.agent-os/instructions/core/create-spec.md
-     ```
-
-  Your codebase is now Agent OS-enabled! 🚀
+  What’s ready:
+  - `.agent-os/product/` layer (architecture, vision, and real roadmap)
+  - Tech stack, key patterns, coding and review conventions
+  - Next: Review, tune docs, then run your next Agent OS spec:
+    ```
+    @.agent-os/instructions/core/create-spec.md
+    ```
+  For full usage: [Agent OS README](https://github.com/buildermethods/agent-os)
 </summary_template>
-
 
 </step>
 

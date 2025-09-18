@@ -16,61 +16,55 @@ export default function Integrations() {
         <div className="mx-auto max-w-5xl px-6">
           <div>
             <h2 className="text-balance text-3xl font-semibold md:text-4xl">
-              Built with the best tools
+              Powerful Features for Government Contracting
             </h2>
             <p className="text-muted-foreground mt-3 text-lg">
-              Launch your project with confidence, knowing that you&apos;re
-              using the best tools available.
+              Streamline your federal contracting process with AI-powered analysis,
+              real-time data, and intelligent supplier matching.
             </p>
           </div>
 
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <IntegrationCard
-              title="Next.js"
-              description="The React framework for production with App Router, Server Components, and built-in optimizations."
-              link="https://nextjs.org"
+              title="SAM.gov Integration"
+              description="Real-time access to federal contract opportunities with automated monitoring and filtering by NAICS codes and agencies."
             >
-              <Nextjs />
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">🏛️</div>
             </IntegrationCard>
 
             <IntegrationCard
-              title="Better Auth"
-              description="Modern authentication library with session management, OAuth providers, and security features."
-              link="https://better-auth.com"
+              title="AI-Powered Analysis"
+              description="Intelligent document parsing and requirement extraction using advanced AI models to analyze RFQ/RFP documents."
             >
-              <BetterAuth />
+              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">🤖</div>
             </IntegrationCard>
 
             <IntegrationCard
-              title="Neon Postgres"
-              description="Serverless PostgreSQL database with branching, autoscaling, and modern developer experience."
-              link="https://neon.tech"
+              title="Supplier Matching"
+              description="Comprehensive supplier database with smart matching algorithms based on capabilities, certifications, and past performance."
             >
-              <NeonPostgres />
+              <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">🤝</div>
             </IntegrationCard>
 
             <IntegrationCard
-              title="Polar.sh"
-              description="Developer-first subscription platform with webhooks, customer portal, and usage-based billing."
-              link="https://polar.sh"
+              title="Pricing Intelligence"
+              description="Historical contract pricing data and market analysis to provide competitive pricing recommendations and estimates."
             >
-              <Polar />
+              <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">💰</div>
             </IntegrationCard>
 
             <IntegrationCard
-              title="Tailwind CSS"
-              description="Utility-first CSS framework for rapid UI development with consistent design tokens."
-              link="https://tailwindcss.com"
+              title="Compliance Tracking"
+              description="Automated compliance checking for federal requirements including set-asides, certifications, and regulations."
             >
-              <TailwindCSS />
+              <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">✅</div>
             </IntegrationCard>
 
             <IntegrationCard
-              title="shadcn/ui"
-              description="Beautiful, accessible components built with Radix UI primitives and styled with Tailwind CSS."
-              link="https://ui.shadcn.com"
+              title="Risk Assessment"
+              description="Comprehensive risk analysis including timeline, competition, financial, and compliance risk factors with mitigation strategies."
             >
-              <Shadcnui />
+              <div className="w-10 h-10 bg-yellow-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">⚠️</div>
             </IntegrationCard>
           </div>
         </div>

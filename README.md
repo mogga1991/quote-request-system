@@ -1,6 +1,6 @@
-# Next.js SaaS Starter Template
+# RLP Software
 
-A comprehensive, production-ready SaaS starter template built with Next.js 15, featuring authentication, subscriptions, AI integration, and modern UI components. Perfect for quickly launching subscription-based applications with all the essential infrastructure in place.
+A comprehensive, production-ready software platform built with Next.js 15, featuring authentication, subscriptions, AI integration, and modern UI components. Professional software solutions designed for business growth and digital transformation.
 
 ## ✨ Features
 
