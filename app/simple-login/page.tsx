@@ -42,7 +42,7 @@ export default function SimpleLogin() {
 
       if (result.success) {
         toast.success("Welcome back!");
-        router.push("/dashboard");
+        router.push("/test-dashboard");
       } else {
         toast.error(result.error || "Sign in failed");
       }
