@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/auth';
 import { 
   createQuoteRequest, 
   getUserQuoteRequests, 
@@ -39,7 +39,7 @@ const searchQuerySchema = z.object({
 // GET /api/quote-requests - List user's quote requests with search/filter
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession(request);
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
 // POST /api/quote-requests - Create new quote request
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
+    const session = await getSession(request);
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

@@ -30,10 +30,12 @@ Government contract analysis is manual, time-consuming, and requires extensive m
 
 ### Core:
 - **SAM.gov Live Integration**: Real-time federal contract opportunity monitoring with intelligent filtering and automated alerts
-- **AI-Powered Requirement Analysis**: Automatic RFQ/RFP document parsing to extract requirements, compliance needs, and technical specifications
+- **AI-Powered Requirement Analysis**: Automatic RFQ/RFP document parsing to extract requirements, compliance needs, and technical specifications  
 - **Intelligent Supplier Matching**: AI-powered matching with GSA Schedule contractors based on capabilities, certifications, and performance
 - **Competitive Pricing Intelligence**: Market pricing analysis with historical contract data and margin optimization recommendations
-- **Bid Management Workflow**: Collaborative bid preparation with team roles, document templates, and submission tracking
+- **AI Document Parser**: Upload RFQ/RFP PDFs and extract structured requirements, quantities, and compliance needs
+- **Quote Aggregation System**: Automated supplier outreach with intelligent quote comparison and evaluation
+- **Bid Success Predictor**: ML-powered bid scoring with win probability analysis and optimization recommendations
 - **Compliance & Certification Tracking**: Automated federal requirement checking with certification status monitoring
 
 ### Advanced/Collaboration:

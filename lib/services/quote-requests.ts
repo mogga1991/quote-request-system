@@ -475,13 +475,49 @@ export async function deleteQuoteRequest(id: string): Promise<boolean> {
   return await quoteRequestService.deleteQuoteRequest(id);
 }
 
-export async function searchQuoteRequests(
-  filters: QuoteRequestFilters = {},
-  pagination: PaginationOptions = {}
-): Promise<{ data: Record<string, unknown>[]; total: number; page: number; limit: number }> {
+export async function searchQuoteRequests(params: {
+  query: string;
+  status?: string;
+  userId: string;
+  limit: number;
+  offset: number;
+  sortBy: string;
+  sortOrder: string;
+}): Promise<{ data: Record<string, unknown>[]; total: number }> {
+  const filters: QuoteRequestFilters = {
+    userId: params.userId,
+    status: params.status,
+    search: params.query,
+  };
+
+  const pagination: PaginationOptions = {
+    page: Math.floor(params.offset / params.limit) + 1,
+    limit: params.limit,
+    sortBy: params.sortBy as any,
+    sortOrder: params.sortOrder as any,
+  };
+
   return await quoteRequestService.listQuoteRequests(filters, pagination);
 }
 
-export async function getUserQuoteRequests(userId: string, status?: string): Promise<Record<string, unknown>[]> {
-  return await quoteRequestService.getQuoteRequestsByUser(userId, status);
+export async function getUserQuoteRequests(userId: string, options: {
+  status?: string;
+  limit: number;
+  offset: number;
+  sortBy: string;
+  sortOrder: string;
+}): Promise<{ data: Record<string, unknown>[]; total: number }> {
+  const filters: QuoteRequestFilters = {
+    userId,
+    status: options.status,
+  };
+
+  const pagination: PaginationOptions = {
+    page: Math.floor(options.offset / options.limit) + 1,
+    limit: options.limit,
+    sortBy: options.sortBy as any,
+    sortOrder: options.sortOrder as any,
+  };
+
+  return await quoteRequestService.listQuoteRequests(filters, pagination);
 }

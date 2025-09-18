@@ -9,6 +9,7 @@ import {
   Search,
   Settings,
   TrendingUp,
+  FileText,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -24,6 +25,11 @@ const navItems: NavItem[] = [
     label: "Opportunities",
     href: "/dashboard",
     icon: HomeIcon,
+  },
+  {
+    label: "Quote Requests",
+    href: "/dashboard/quote-requests",
+    icon: FileText,
   },
   {
     label: "Suppliers",

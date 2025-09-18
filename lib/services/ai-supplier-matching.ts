@@ -1,12 +1,8 @@
-import OpenAI from 'openai';
 import { z } from 'zod';
 import { db } from '@/db/drizzle';
 import { suppliers } from '@/db/schema';
 import { and, or, ilike, inArray, sql } from 'drizzle-orm';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { convertAndCallClaude, extractJSON } from '@/lib/claude-helper';
 
 // Validation schemas
 const supplierMatchSchema = z.object({
@@ -234,7 +230,7 @@ Return analysis in this JSON format:
 }
 `;
 
-    const completion = await openai.chat.completions.create({
+    const responseContent = await convertAndCallClaude({
       model: 'gpt-4o',
       messages: [
         {
@@ -251,12 +247,12 @@ Return analysis in this JSON format:
       response_format: { type: 'json_object' }
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    // Response content is already extracted by convertAndCallClaude
     if (!responseContent) {
       throw new Error('No response from AI service');
     }
 
-    const parsedResponse = JSON.parse(responseContent);
+    const parsedResponse = extractJSON(responseContent);
     return supplierMatchSchema.parse(parsedResponse);
 
   } catch (error) {
@@ -343,7 +339,7 @@ Return analysis in this JSON format:
 }
 `;
 
-    const completion = await openai.chat.completions.create({
+    const responseContent = await convertAndCallClaude({
       model: 'gpt-4o',
       messages: [
         {
@@ -360,7 +356,7 @@ Return analysis in this JSON format:
       response_format: { type: 'json_object' }
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    // Response content is already extracted by convertAndCallClaude
     if (!responseContent) {
       throw new Error('No response from AI service');
     }
@@ -430,7 +426,7 @@ Return analysis in this JSON format:
 }
 `;
 
-    const completion = await openai.chat.completions.create({
+    const responseContent = await convertAndCallClaude({
       model: 'gpt-4o',
       messages: [
         {
@@ -447,7 +443,7 @@ Return analysis in this JSON format:
       response_format: { type: 'json_object' }
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    // Response content is already extracted by convertAndCallClaude
     if (!responseContent) {
       throw new Error('No response from AI service');
     }

@@ -1,9 +1,5 @@
-import OpenAI from 'openai';
 import { z } from 'zod';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { convertAndCallClaude, extractJSON } from '@/lib/claude-helper';
 
 // Validation schemas
 const templateSchema = z.object({
@@ -78,7 +74,7 @@ export async function generateTemplate(
     
     const prompt = buildTemplatePrompt(validatedRequest);
     
-    const completion = await openai.chat.completions.create({
+    const responseContent = await convertAndCallClaude({
       model: 'gpt-4o',
       messages: [
         {
@@ -95,12 +91,12 @@ export async function generateTemplate(
       response_format: { type: 'json_object' }
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    // Response content is already extracted by convertAndCallClaude
     if (!responseContent) {
       throw new Error('No response from AI service');
     }
 
-    const parsedResponse = JSON.parse(responseContent);
+    const parsedResponse = extractJSON(responseContent);
     
     // Add metadata
     parsedResponse.metadata = {
@@ -179,7 +175,7 @@ Customize the template to better fit this specific opportunity. Modify sections,
 Return the customized template in the same JSON format as the base template.
 `;
 
-    const completion = await openai.chat.completions.create({
+    const responseContent = await convertAndCallClaude({
       model: 'gpt-4o',
       messages: [
         {
@@ -196,7 +192,7 @@ Return the customized template in the same JSON format as the base template.
       response_format: { type: 'json_object' }
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    // Response content is already extracted by convertAndCallClaude
     if (!responseContent) {
       throw new Error('No response from AI service');
     }
@@ -294,7 +290,7 @@ Return recommendations in this JSON format:
 }
 `;
 
-    const completion = await openai.chat.completions.create({
+    const responseContent = await convertAndCallClaude({
       model: 'gpt-4o',
       messages: [
         {
@@ -311,7 +307,7 @@ Return recommendations in this JSON format:
       response_format: { type: 'json_object' }
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    // Response content is already extracted by convertAndCallClaude
     if (!responseContent) {
       throw new Error('No response from AI service');
     }
@@ -375,7 +371,7 @@ Return evaluation in this JSON format:
 }
 `;
 
-    const completion = await openai.chat.completions.create({
+    const responseContent = await convertAndCallClaude({
       model: 'gpt-4o',
       messages: [
         {
@@ -392,7 +388,7 @@ Return evaluation in this JSON format:
       response_format: { type: 'json_object' }
     });
 
-    const responseContent = completion.choices[0]?.message?.content;
+    // Response content is already extracted by convertAndCallClaude
     if (!responseContent) {
       throw new Error('No response from AI service');
     }

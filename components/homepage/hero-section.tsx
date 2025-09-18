@@ -1,51 +1,103 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, Play, Shield, Users, Zap } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="py-20">
-      <div className="relative z-10 mx-auto w-full max-w-2xl px-6 lg:px-0">
-        <div className="relative text-center">
-          <p className="text-3xl">🏛️</p>
-          <h1 className="mx-auto mt-12 max-w-xl text-balance text-5xl font-medium">
-            GovBid AI
+    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] dark:bg-grid-slate-700/25"></div>
+      
+      <div className="relative mx-auto max-w-7xl px-6 pt-20 pb-32 sm:pt-24 lg:px-8 lg:pt-32">
+        <div className="mx-auto max-w-2xl text-center">
+          {/* Trust Badge */}
+          <Badge variant="secondary" className="mb-6 border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-300">
+            <Shield className="mr-2 h-3 w-3" />
+            Enterprise-Grade Security
+          </Badge>
+
+          {/* Main Headline */}
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
+            Transform Government 
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Contracting</span>
           </h1>
-          <p className="text-muted-foreground mx-auto mb-6 mt-4 text-balance text-xl">
-            Intelligent government contracting platform that automates RFQ analysis,
-            supplier matching, and competitive pricing for federal opportunities.
+          
+          <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+            AI-powered platform that automates RFQ analysis, supplier matching, and competitive bidding for federal opportunities. 
+            Reduce procurement time by 80% and increase win rates by 45%.
           </p>
-          <div className="flex flex-col items-center gap-2 *:w-full sm:flex-row sm:justify-center sm:*:w-auto">
-            <Button asChild variant="default" size="sm">
-              <Link href="/dashboard" prefetch={true}>
-                <span className="text-nowrap">Get Started</span>
+
+          {/* Key Benefits */}
+          <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center gap-2">
+              <Zap className="h-4 w-4 text-yellow-500" />
+              <span>10x Faster Processing</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-green-500" />
+              <span>500+ Verified Suppliers</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-blue-500" />
+              <span>FedRAMP Compliant</span>
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <Button asChild size="lg" className="group">
+              <Link href="/sign-up">
+                Start Free Trial
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/pricing" prefetch={true}>
-                <span className="text-nowrap">View Pricing</span>
+            <Button asChild variant="outline" size="lg" className="group">
+              <Link href="#demo">
+                <Play className="mr-2 h-4 w-4" />
+                Watch Demo
               </Link>
             </Button>
           </div>
+
+          {/* Social Proof */}
+          <div className="mt-8 text-xs text-gray-500 dark:text-gray-400">
+            Trusted by 200+ government agencies and contractors
+          </div>
         </div>
 
-        <div className="relative mt-8 overflow-hidden rounded-3xl bg-black/10">
-          <Image
-            src="https://images.unsplash.com/photo-1547623641-d2c56c03e2a7?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt=""
-            className="absolute inset-0 size-full object-cover"
-            width={1920}
-            height={1080}
-          />
-
-          <div className="bg-background rounded-(--radius) relative m-4 overflow-hidden border border-transparent shadow-xl shadow-black/15 ring-1 ring-black/10 sm:m-8 md:m-12">
-            <Image
-              src="https://jdj14ctwppwprnqu.public.blob.vercel-storage.com/GsZRNq5WsAAMbrG-H9YrPK4HJnXSQV692jECFST4zyYpva.jpg"
-              alt="app screen"
-              width="2880"
-              height="1842"
-              className="object-top-left size-full object-cover"
-            />
+        {/* Hero Image/Dashboard Preview */}
+        <div className="relative mx-auto mt-16 max-w-5xl">
+          <div className="relative overflow-hidden rounded-2xl bg-gray-900 shadow-2xl ring-1 ring-gray-900/10">
+            <div className="bg-gray-800 px-4 py-3">
+              <div className="flex items-center space-x-2">
+                <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                <div className="h-3 w-3 rounded-full bg-yellow-500"></div>
+                <div className="h-3 w-3 rounded-full bg-green-500"></div>
+              </div>
+            </div>
+            <div className="px-6 py-8">
+              <Image
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0"
+                alt="Dashboard Preview"
+                width={1200}
+                height={800}
+                className="rounded-lg object-cover"
+                priority
+              />
+            </div>
+          </div>
+          
+          {/* Floating Elements */}
+          <div className="absolute -top-4 -left-4 hidden rounded-lg bg-white p-3 shadow-lg dark:bg-gray-800 lg:block">
+            <div className="text-xs font-medium text-gray-900 dark:text-white">Live Opportunities</div>
+            <div className="text-lg font-bold text-green-600">2,847</div>
+          </div>
+          
+          <div className="absolute -top-4 -right-4 hidden rounded-lg bg-white p-3 shadow-lg dark:bg-gray-800 lg:block">
+            <div className="text-xs font-medium text-gray-900 dark:text-white">Active Quotes</div>
+            <div className="text-lg font-bold text-blue-600">156</div>
           </div>
         </div>
       </div>

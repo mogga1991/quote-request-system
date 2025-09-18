@@ -24,3 +24,19 @@ export const auth = betterAuth({
     nextCookies(),
   ],
 });
+
+// Helper for API routes to get session
+export async function getSession(request: Request) {
+  try {
+    const cookies = request.headers.get('cookie') || '';
+    const result = await auth.api.getSession({ 
+      headers: {
+        cookie: cookies
+      }
+    });
+    return result;
+  } catch (error) {
+    console.error('Error getting session:', error);
+    return null;
+  }
+}

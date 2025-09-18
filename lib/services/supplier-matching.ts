@@ -1,7 +1,8 @@
+import { z } from 'zod';
 import { db } from '@/db/drizzle';
 import { suppliers } from '@/db/schema';
-// import { eq, and, inArray, sql } from 'drizzle-orm'; // Unused imports
-import { SamGovOpportunity } from './sam-gov';
+import { and, or, ilike, inArray, sql, eq } from 'drizzle-orm';
+import { convertAndCallClaude, extractJSON } from '@/lib/claude-helper';
 
 export interface SupplierMatch {
   supplier: {

@@ -34,7 +34,9 @@
 **Cloudflare R2** - S3-compatible object storage for document uploads and processing
 
 ## External APIs
-- **SAM.gov API** - Government contract opportunities data source
+- **SAM.gov API** - Government contract opportunities data source (Phase 1 priority)
+- **GSA eLibrary API** - Government supplier and contract data (Phase 2 priority) 
+- **FPDS-NG API** - Federal procurement data for historical analysis (Phase 2 priority)
 - **OpenAI GPT-4** - AI-powered document parsing and requirement analysis
 - **Web scraping services** - Supplier catalog and pricing data collection
 

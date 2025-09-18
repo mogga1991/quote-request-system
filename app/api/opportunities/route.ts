@@ -94,6 +94,7 @@ export async function GET(request: NextRequest) {
         .offset(offset);
 
       const transformedOpportunities = dbOpportunities.map(opp => ({
+        id: opp.id,
         noticeId: opp.noticeId,
         title: opp.title,
         department: opp.department,
