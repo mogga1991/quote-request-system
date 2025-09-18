@@ -84,7 +84,18 @@ export class SamGovService {
       if (!response.ok) {
         const errorText = await response.text();
         console.error('SAM.gov API Error Response:', errorText);
-        throw new Error(`SAM.gov API error: ${response.status} ${response.statusText} - ${errorText}`);
+        
+        // Provide helpful error messages for common issues
+        let errorMessage = `SAM.gov API error: ${response.status} ${response.statusText}`;
+        if (response.status === 401 || response.status === 403) {
+          errorMessage = 'SAM.gov API key is invalid or not authorized for opportunities API. Please verify your API key and ensure it has access to the opportunities service.';
+        } else if (response.status === 429) {
+          errorMessage = 'SAM.gov API rate limit exceeded. Please try again later.';
+        } else if (response.status >= 500) {
+          errorMessage = 'SAM.gov API is currently unavailable. Please try again later.';
+        }
+        
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
