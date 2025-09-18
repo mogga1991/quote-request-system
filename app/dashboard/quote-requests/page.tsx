@@ -16,28 +16,28 @@ export default async function QuoteRequestsPage() {
   }
 
   return (
-    <section className="flex flex-col items-start justify-start p-6 w-full">
-      <div className="w-full">
-        <div className="flex flex-col items-start justify-center gap-2 mb-6">
-          <div className="flex items-center justify-between w-full">
-            <div>
-              <h1 className="text-3xl font-semibold tracking-tight">
-                Quote Requests
-              </h1>
-              <p className="text-muted-foreground">
-                Manage and track your requests for quotes from suppliers.
-              </p>
-            </div>
-            <Link href="/dashboard/quote-requests/create">
-              <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Create Quote Request
-              </Button>
-            </Link>
-          </div>
+    <div className="space-y-6">
+      {/* Header Section */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+            Quote Requests
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
+            Manage and track your requests for quotes from suppliers.
+          </p>
         </div>
-        <QuoteRequestsList userId={result.session.userId} />
+        <Link href="/dashboard/quote-requests/create" className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">
+            <Plus className="h-4 w-4 mr-2" />
+            <span className="sm:inline hidden">Create Quote Request</span>
+            <span className="sm:hidden inline">Create Request</span>
+          </Button>
+        </Link>
       </div>
-    </section>
+
+      {/* Quote Requests List */}
+      <QuoteRequestsList userId={result.session.userId} />
+    </div>
   );
 }

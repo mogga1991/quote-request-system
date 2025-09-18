@@ -109,17 +109,17 @@ export default function PricingTable({
   };
 
   return (
-    <section className="flex flex-col items-center justify-center px-4 mb-24 w-full">
+    <section className="w-full">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-medium tracking-tight mb-4">
-          Fake Subscription
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">
+          Simple, Transparent Pricing
         </h1>
-        <p className="text-xl text-muted-foreground">
-          Test out this starter kit using this fake subscription.
+        <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+          Choose the plan that fits your government contracting needs. Start winning bids faster with AI-powered tools.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
         {/* Starter Tier */}
         <Card className="relative h-fit">
           {isCurrentPlan(STARTER_TIER) && (
@@ -133,29 +133,33 @@ export default function PricingTable({
             </div>
           )}
           <CardHeader>
-            <CardTitle className="text-2xl">Starter</CardTitle>
-            <CardDescription>Perfect for getting started</CardDescription>
+            <CardTitle className="text-xl sm:text-2xl">Professional</CardTitle>
+            <CardDescription className="text-sm sm:text-base">Perfect for small to mid-size contractors</CardDescription>
             <div className="mt-4">
-              <span className="text-4xl font-bold">$1,000</span>
-              <span className="text-muted-foreground">/month</span>
+              <span className="text-3xl sm:text-4xl font-bold">$297</span>
+              <span className="text-muted-foreground text-sm sm:text-base">/month</span>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-3">
-              <Check className="h-5 w-5 text-green-500" />
-              <span>5 Projects</span>
+              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
+              <span className="text-sm sm:text-base">Unlimited opportunity tracking</span>
             </div>
             <div className="flex items-center gap-3">
-              <Check className="h-5 w-5 text-green-500" />
-              <span>10GB Storage</span>
+              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
+              <span className="text-sm sm:text-base">AI-powered quote generation</span>
             </div>
             <div className="flex items-center gap-3">
-              <Check className="h-5 w-5 text-green-500" />
-              <span>1 Team Member</span>
+              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
+              <span className="text-sm sm:text-base">500+ verified suppliers</span>
             </div>
             <div className="flex items-center gap-3">
-              <Check className="h-5 w-5 text-green-500" />
-              <span>Email Support</span>
+              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
+              <span className="text-sm sm:text-base">SAM.gov integration</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Check className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
+              <span className="text-sm sm:text-base">Priority support</span>
             </div>
           </CardContent>
           <CardFooter>

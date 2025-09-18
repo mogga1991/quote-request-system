@@ -5,8 +5,10 @@ export default async function PricingPage() {
   const subscriptionDetails = await getSubscriptionDetails();
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen">
-      <PricingTable subscriptionDetails={subscriptionDetails} />;
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <PricingTable subscriptionDetails={subscriptionDetails} />
+      </div>
     </div>
   );
 }

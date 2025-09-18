@@ -170,8 +170,9 @@ export function QuoteRequestsList({ userId }: QuoteRequestsListProps) {
   return (
     <div className="space-y-6">
       {/* Search and Filters */}
-      <div className="flex gap-4 items-center">
-        <div className="relative flex-1 max-w-md">
+      <div className="space-y-4">
+        {/* Search Bar */}
+        <div className="relative">
           <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
             placeholder="Search quote requests..."
@@ -181,21 +182,26 @@ export function QuoteRequestsList({ userId }: QuoteRequestsListProps) {
             className="pl-10"
           />
         </div>
-        <Select value={statusFilter} onValueChange={handleStatusFilter}>
-          <SelectTrigger className="w-32">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="sent">Sent</SelectItem>
-            <SelectItem value="expired">Expired</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-          </SelectContent>
-        </Select>
-        <Button onClick={handleSearch} variant="outline">
-          Search
-        </Button>
+        
+        {/* Filter Row */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Select value={statusFilter} onValueChange={handleStatusFilter}>
+            <SelectTrigger className="w-full sm:w-40">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="draft">Draft</SelectItem>
+              <SelectItem value="sent">Sent</SelectItem>
+              <SelectItem value="expired">Expired</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button onClick={handleSearch} variant="outline" className="w-full sm:w-auto">
+            <SearchIcon className="h-4 w-4 mr-2 sm:hidden" />
+            Search
+          </Button>
+        </div>
       </div>
 
       {/* Results Summary */}
@@ -228,21 +234,21 @@ export function QuoteRequestsList({ userId }: QuoteRequestsListProps) {
             return (
               <Card key={quoteRequest.id} className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="space-y-1">
-                      <CardTitle className="text-lg">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <CardTitle className="text-base sm:text-lg leading-tight">
                         <Link 
                           href={`/dashboard/quote-requests/${quoteRequest.id}`}
-                          className="hover:text-blue-600 transition-colors"
+                          className="hover:text-blue-600 transition-colors line-clamp-2"
                         >
                           {quoteRequest.title}
                         </Link>
                       </CardTitle>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
                         {quoteRequest.opportunityTitle} • {quoteRequest.opportunityDepartment}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-row sm:flex-col items-start gap-2">
                       {quoteRequest.aiGenerated && (
                         <Badge variant="secondary" className="text-xs">
                           AI Generated
@@ -258,24 +264,25 @@ export function QuoteRequestsList({ userId }: QuoteRequestsListProps) {
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center gap-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <CalendarIcon className="h-4 w-4" />
-                        <span className={deadlineInfo.color}>
+                        <CalendarIcon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                        <span className={`${deadlineInfo.color} truncate`}>
                           {deadlineInfo.text}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
-                        <ClockIcon className="h-4 w-4" />
-                        <span>
+                        <ClockIcon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                        <span className="truncate">
                           Created {formatDistanceToNow(new Date(quoteRequest.createdAt), { addSuffix: true })}
                         </span>
                       </div>
                     </div>
-                    <Link href={`/dashboard/quote-requests/${quoteRequest.id}`}>
-                      <Button variant="ghost" size="sm">
-                        View Details
+                    <Link href={`/dashboard/quote-requests/${quoteRequest.id}`} className="w-full sm:w-auto">
+                      <Button variant="ghost" size="sm" className="w-full sm:w-auto">
+                        <span className="sm:inline hidden">View Details</span>
+                        <span className="sm:hidden inline">View</span>
                         <ExternalLinkIcon className="h-4 w-4 ml-1" />
                       </Button>
                     </Link>

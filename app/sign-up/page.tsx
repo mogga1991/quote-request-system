@@ -65,78 +65,130 @@ function SignUpContent() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center w-full h-screen p-4">
-      <Card className="max-w-md w-full">
-        <CardHeader>
-          <CardTitle className="text-lg md:text-xl">
-            Create Your Account
-          </CardTitle>
-          <CardDescription className="text-xs md:text-sm">
-            Sign up to start using the Quote Request System
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignUp} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="John Doe"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
+    <div className="min-h-screen flex flex-col justify-center items-center p-4 bg-gray-50 dark:bg-gray-900">
+      <div className="w-full max-w-md space-y-6">
+        {/* Logo/Header */}
+        <div className="text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            GovBid AI
+          </h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            Government Contracting Platform
+          </p>
+        </div>
+
+        <Card className="w-full">
+          <CardHeader className="space-y-2">
+            <CardTitle className="text-xl sm:text-2xl text-center">
+              Create Account
+            </CardTitle>
+            <CardDescription className="text-center text-sm sm:text-base">
+              Join thousands of contractors winning government bids
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium">
+                  Full Name
+                </Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="h-11"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-medium">
+                  Email Address
+                </Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={loading}
+                  className="h-11"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Create a password (min. 6 characters)"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  minLength={6}
+                  className="h-11"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium">
+                  Confirm Password
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  minLength={6}
+                  className="h-11"
+                />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full h-11 text-base" 
                 disabled={loading}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={loading}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={loading}
-                minLength={6}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                disabled={loading}
-                minLength={6}
-              />
-            </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Sign Up"}
-            </Button>
+              >
+                {loading ? "Creating account..." : "Create Account"}
+              </Button>
+            </form>
+            
             <div className="text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/sign-in" className="underline">
+              <span className="text-muted-foreground">Already have an account? </span>
+              <Link 
+                href="/sign-in" 
+                className="text-primary hover:underline font-medium"
+              >
                 Sign in
               </Link>
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+
+        {/* Footer */}
+        <p className="text-xs text-center text-gray-500 dark:text-gray-400 leading-relaxed">
+          By creating an account, you agree to our{" "}
+          <Link
+            href="/terms-of-service"
+            className="underline hover:text-gray-700 dark:hover:text-gray-300"
+          >
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link
+            href="/privacy-policy"
+            className="underline hover:text-gray-700 dark:hover:text-gray-300"
+          >
+            Privacy Policy
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

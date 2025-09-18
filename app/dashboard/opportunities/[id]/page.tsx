@@ -19,8 +19,8 @@ export default async function OpportunityPage({ params }: PageProps) {
   }
 
   return (
-    <section className="flex flex-col items-start justify-start p-6 w-full">
+    <div className="space-y-6">
       <OpportunityAnalysis opportunityId={params.id} />
-    </section>
+    </div>
   );
 }
