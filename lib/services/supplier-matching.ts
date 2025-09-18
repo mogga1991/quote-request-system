@@ -1,6 +1,6 @@
 import { db } from '@/db/drizzle';
-import { suppliers, quotes } from '@/db/schema';
-import { eq, and, inArray, sql } from 'drizzle-orm';
+import { suppliers } from '@/db/schema';
+// import { eq, and, inArray, sql } from 'drizzle-orm'; // Unused imports
 import { SamGovOpportunity } from './sam-gov';
 
 export interface SupplierMatch {

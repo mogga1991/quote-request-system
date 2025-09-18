@@ -7,7 +7,7 @@ import {
   suppliers,
   user
 } from '@/db/schema';
-import { eq } from 'drizzle-orm';
+// import { eq } from 'drizzle-orm'; // Unused import
 import { nanoid } from 'nanoid';
 
 export interface SeedQuoteRequestsOptions {

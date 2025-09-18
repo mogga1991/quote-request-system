@@ -16,9 +16,9 @@ export interface CreateQuoteRequestData {
   userId: string;
   title: string;
   description?: string;
-  requirements?: any;
+  requirements?: Record<string, unknown>;
   deadline: Date;
-  attachments?: any[];
+  attachments?: Record<string, unknown>[];
   aiGenerated?: boolean;
   aiPrompt?: string;
 }
@@ -27,9 +27,9 @@ export interface UpdateQuoteRequestData {
   title?: string;
   description?: string;
   status?: 'draft' | 'sent' | 'expired' | 'completed';
-  requirements?: any;
+  requirements?: Record<string, unknown>;
   deadline?: Date;
-  attachments?: any[];
+  attachments?: Record<string, unknown>[];
 }
 
 export interface QuoteRequestWithDetails {
@@ -39,9 +39,9 @@ export interface QuoteRequestWithDetails {
   title: string;
   description: string | null;
   status: string;
-  requirements: any;
+  requirements: Record<string, unknown>;
   deadline: Date;
-  attachments: any;
+  attachments: Record<string, unknown>;
   aiGenerated: boolean;
   aiPrompt: string | null;
   createdAt: Date;
@@ -196,7 +196,7 @@ export class QuoteRequestService {
    * Update quote request
    */
   async updateQuoteRequest(id: string, data: UpdateQuoteRequestData): Promise<boolean> {
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
     
     if (data.title !== undefined) updateData.title = data.title;
     if (data.description !== undefined) updateData.description = data.description;
@@ -233,7 +233,7 @@ export class QuoteRequestService {
   async listQuoteRequests(
     filters: QuoteRequestFilters = {},
     pagination: PaginationOptions = {}
-  ): Promise<{ data: any[]; total: number; page: number; limit: number }> {
+  ): Promise<{ data: Record<string, unknown>[]; total: number; page: number; limit: number }> {
     const {
       page = 1,
       limit = 20,
@@ -413,7 +413,7 @@ export class QuoteRequestService {
   /**
    * Get quote requests for a specific opportunity
    */
-  async getQuoteRequestsByOpportunity(opportunityId: string): Promise<any[]> {
+  async getQuoteRequestsByOpportunity(opportunityId: string): Promise<Record<string, unknown>[]> {
     return await db
       .select({
         id: quoteRequests.id,
@@ -432,7 +432,7 @@ export class QuoteRequestService {
   /**
    * Get quote requests by user
    */
-  async getQuoteRequestsByUser(userId: string, status?: string): Promise<any[]> {
+  async getQuoteRequestsByUser(userId: string, status?: string): Promise<Record<string, unknown>[]> {
     const conditions = [eq(quoteRequests.userId, userId)];
     
     if (status) {
@@ -453,4 +453,16 @@ export class QuoteRequestService {
       .where(and(...conditions))
       .orderBy(desc(quoteRequests.createdAt));
   }
+}
+
+// Create and export service instance
+export const quoteRequestService = new QuoteRequestService();
+
+// Export convenience functions
+export async function getQuoteRequestById(id: string): Promise<QuoteRequestWithDetails | null> {
+  return await quoteRequestService.getQuoteRequestById(id);
+}
+
+export async function createQuoteRequest(data: CreateQuoteRequestData): Promise<string> {
+  return await quoteRequestService.createQuoteRequest(data);
 }

@@ -85,9 +85,9 @@ export class SamGovService {
     }
   }
 
-  private transformApiResponse(data: any): SamGovApiResponse {
+  private transformApiResponse(data: Record<string, unknown>): SamGovApiResponse {
     // Transform the actual SAM.gov API response format to our internal format
-    const opportunities = (data.opportunitiesData || []).map((item: any) => ({
+    const opportunities = (data.opportunitiesData as unknown[] || []).map((item: Record<string, unknown>) => ({
       noticeId: item.noticeId || nanoid(),
       title: item.title || 'Untitled Opportunity',
       department: item.organizationInformation?.organizationName || item.department || 'Unknown Department',
@@ -116,7 +116,7 @@ export class SamGovService {
     };
   }
 
-  private getMockOpportunities(params: any): SamGovApiResponse {
+  private getMockOpportunities(params: Record<string, unknown>): SamGovApiResponse {
     const mockOpportunities: SamGovOpportunity[] = [
       {
         noticeId: 'MOCK-001',
@@ -251,4 +251,12 @@ export class SamGovService {
       return null;
     }
   }
+}
+
+// Create and export service instance
+export const samGovService = new SamGovService();
+
+// Export convenience function
+export async function getOpportunityById(id: string): Promise<SamGovOpportunity | null> {
+  return await samGovService.getOpportunityDetails(id);
 }

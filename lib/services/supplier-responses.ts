@@ -16,7 +16,7 @@ export interface CreateSupplierResponseData {
   totalPriceCents?: number;
   deliveryTimedays?: number;
   notes?: string;
-  attachments?: any[];
+  attachments?: Record<string, unknown>[];
   expiresAt?: Date;
 }
 
@@ -26,7 +26,7 @@ export interface UpdateSupplierResponseData {
   totalPriceCents?: number;
   deliveryTimedays?: number;
   notes?: string;
-  attachments?: any[];
+  attachments?: Record<string, unknown>[];
   expiresAt?: Date;
 }
 
@@ -48,7 +48,7 @@ export interface SupplierResponseWithDetails {
   totalPriceCents: number | null;
   deliveryTimedays: number | null;
   notes: string | null;
-  attachments: any;
+  attachments: Record<string, unknown>;
   submittedAt: Date | null;
   expiresAt: Date | null;
   createdAt: Date;
@@ -57,7 +57,7 @@ export interface SupplierResponseWithDetails {
     id: string;
     title: string;
     deadline: Date;
-    requirements: any;
+    requirements: Record<string, unknown>;
   };
   supplier: {
     id: string;
@@ -170,7 +170,7 @@ export class SupplierResponseService {
    * Update supplier response
    */
   async updateSupplierResponse(id: string, data: UpdateSupplierResponseData): Promise<boolean> {
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
     
     if (data.status !== undefined) {
       updateData.status = data.status;
@@ -217,7 +217,7 @@ export class SupplierResponseService {
    * Decline supplier response
    */
   async declineSupplierResponse(id: string, reason?: string): Promise<boolean> {
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       status: 'declined',
       updatedAt: new Date(),
     };
@@ -287,7 +287,7 @@ export class SupplierResponseService {
   /**
    * List responses for a quote request
    */
-  async getResponsesForQuoteRequest(quoteRequestId: string): Promise<any[]> {
+  async getResponsesForQuoteRequest(quoteRequestId: string): Promise<Record<string, unknown>[]> {
     return await db
       .select({
         id: supplierResponses.id,
@@ -308,7 +308,7 @@ export class SupplierResponseService {
   /**
    * List responses by supplier
    */
-  async getResponsesBySupplier(supplierId: string, status?: string): Promise<any[]> {
+  async getResponsesBySupplier(supplierId: string, status?: string): Promise<Record<string, unknown>[]> {
     const conditions = [eq(supplierResponses.supplierId, supplierId)];
     
     if (status) {
@@ -474,4 +474,20 @@ export class SupplierResponseService {
       errors,
     };
   }
+}
+
+// Create and export service instance
+export const supplierResponseService = new SupplierResponseService();
+
+// Export convenience functions
+export async function getSupplierResponseById(id: string): Promise<SupplierResponseWithDetails | null> {
+  return await supplierResponseService.getSupplierResponseById(id);
+}
+
+export async function getResponsesByQuoteRequest(quoteRequestId: string): Promise<Record<string, unknown>[]> {
+  return await supplierResponseService.getResponsesForQuoteRequest(quoteRequestId);
+}
+
+export async function updateSupplierResponse(id: string, data: UpdateSupplierResponseData): Promise<boolean> {
+  return await supplierResponseService.updateSupplierResponse(id, data);
 }
