@@ -1,8 +1,8 @@
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 
-// Initialize Anthropic client
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
+// Initialize OpenAI client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 interface OpenAIMessage {
@@ -19,53 +19,39 @@ interface OpenAIRequest {
 }
 
 /**
- * Convert OpenAI-style request to Claude and get response
+ * Call OpenAI API with standardized request format
  */
 export async function convertAndCallClaude(request: OpenAIRequest): Promise<string> {
-  // Combine system and user messages for Claude
-  let combinedPrompt = '';
-  
-  for (const message of request.messages) {
-    if (message.role === 'system') {
-      combinedPrompt += `${message.content}\n\n`;
-    } else if (message.role === 'user') {
-      combinedPrompt += message.content;
-    }
-  }
-
-  // Add JSON instruction if needed
-  if (request.response_format?.type === 'json_object') {
-    combinedPrompt += '\n\nPlease respond with valid JSON only.';
-  }
-
-  const completion = await anthropic.messages.create({
-    model: 'claude-3-5-sonnet-latest',
+  const completion = await openai.chat.completions.create({
+    model: request.model || 'gpt-4o-mini',
+    messages: request.messages as any,
     max_tokens: request.max_tokens || 2000,
     temperature: request.temperature || 0.7,
-    messages: [
-      {
-        role: 'user',
-        content: combinedPrompt
-      }
-    ]
+    response_format: request.response_format as any,
   });
 
-  const responseContent = completion.content[0]?.type === 'text' ? completion.content[0].text : null;
+  const responseContent = completion.choices[0]?.message?.content;
   
   if (!responseContent) {
-    throw new Error('No response from Claude AI service');
+    throw new Error('No response from OpenAI service');
   }
 
   return responseContent;
 }
 
 /**
- * Extract JSON from Claude's response (Claude sometimes adds explanatory text)
+ * Extract JSON from AI response (handles cases where JSON is wrapped in text)
  */
 export function extractJSON(response: string): any {
-  const jsonMatch = response.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
-    throw new Error('No valid JSON found in AI response');
+  try {
+    // Try parsing as direct JSON first
+    return JSON.parse(response);
+  } catch {
+    // If that fails, look for JSON within the text
+    const jsonMatch = response.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      throw new Error('No valid JSON found in AI response');
+    }
+    return JSON.parse(jsonMatch[0]);
   }
-  return JSON.parse(jsonMatch[0]);
 }
