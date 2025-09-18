@@ -31,8 +31,8 @@ export function OpportunitiesList() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [naicsFilter, setNaicsFilter] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [naicsFilter, setNaicsFilter] = useState("all");
   const [error, setError] = useState<string | null>(null);
 
   const fetchOpportunities = async (refresh = false) => {
@@ -119,10 +119,10 @@ export function OpportunitiesList() {
       opp.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       opp.department.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesDepartment = !departmentFilter || 
+    const matchesDepartment = !departmentFilter || departmentFilter === "all" || 
       opp.department.toLowerCase().includes(departmentFilter.toLowerCase());
     
-    const matchesNaics = !naicsFilter || opp.naicsCode?.includes(naicsFilter);
+    const matchesNaics = !naicsFilter || naicsFilter === "all" || opp.naicsCode?.includes(naicsFilter);
     
     return matchesSearch && matchesDepartment && matchesNaics;
   });
@@ -194,7 +194,7 @@ export function OpportunitiesList() {
             <SelectValue placeholder="Filter by department" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Departments</SelectItem>
+            <SelectItem value="all">All Departments</SelectItem>
             {departments.map((dept) => (
               <SelectItem key={dept} value={dept}>
                 {dept}
@@ -209,7 +209,7 @@ export function OpportunitiesList() {
             <SelectValue placeholder="Filter by NAICS" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All NAICS</SelectItem>
+            <SelectItem value="all">All NAICS</SelectItem>
             {naicsCodes.map((naics) => (
               <SelectItem key={naics} value={naics!}>
                 {naics}
@@ -243,8 +243,8 @@ export function OpportunitiesList() {
                 <Button 
                   onClick={() => {
                     setSearchTerm("");
-                    setDepartmentFilter("");
-                    setNaicsFilter("");
+                    setDepartmentFilter("all");
+                    setNaicsFilter("all");
                   }}
                   variant="outline"
                   className="mt-4"
