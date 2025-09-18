@@ -41,7 +41,7 @@ export function OpportunitiesList() {
       else setLoading(true);
       
       const params = new URLSearchParams({
-        limit: "25",
+        limit: "50",
         ...(refresh && { refresh: "true" }),
       });
 
