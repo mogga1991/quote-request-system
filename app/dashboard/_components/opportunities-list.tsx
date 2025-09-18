@@ -177,8 +177,9 @@ export function OpportunitiesList() {
   return (
     <div className="space-y-6">
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
+      <div className="space-y-4">
+        {/* Search Bar */}
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
           <Input
             placeholder="Search opportunities..."
@@ -188,44 +189,49 @@ export function OpportunitiesList() {
           />
         </div>
         
-        <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-          <SelectTrigger className="w-full sm:w-64">
-            <Building className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Filter by department" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Departments</SelectItem>
-            {departments.map((dept) => (
-              <SelectItem key={dept} value={dept}>
-                {dept}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Filter Row */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
+            <SelectTrigger className="w-full sm:flex-1">
+              <Building className="mr-2 h-4 w-4 flex-shrink-0" />
+              <SelectValue placeholder="Filter by department" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Departments</SelectItem>
+              {departments.map((dept) => (
+                <SelectItem key={dept} value={dept}>
+                  {dept}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        <Select value={naicsFilter} onValueChange={setNaicsFilter}>
-          <SelectTrigger className="w-full sm:w-48">
-            <Filter className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Filter by NAICS" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All NAICS</SelectItem>
-            {naicsCodes.map((naics) => (
-              <SelectItem key={naics} value={naics!}>
-                {naics}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          <Select value={naicsFilter} onValueChange={setNaicsFilter}>
+            <SelectTrigger className="w-full sm:flex-1">
+              <Filter className="mr-2 h-4 w-4 flex-shrink-0" />
+              <SelectValue placeholder="Filter by NAICS" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All NAICS</SelectItem>
+              {naicsCodes.map((naics) => (
+                <SelectItem key={naics} value={naics!}>
+                  {naics}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        <Button 
-          onClick={() => fetchOpportunities(true)} 
-          disabled={refreshing}
-          variant="outline"
-        >
-          <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
-          {refreshing ? "Refreshing..." : "Refresh"}
-        </Button>
+          <Button 
+            onClick={() => fetchOpportunities(true)} 
+            disabled={refreshing}
+            variant="outline"
+            className="w-full sm:w-auto"
+          >
+            <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+            <span className="sm:inline hidden">{refreshing ? "Refreshing..." : "Refresh"}</span>
+            <span className="sm:hidden inline">{refreshing ? "..." : "Refresh"}</span>
+          </Button>
+        </div>
       </div>
 
       {/* Results Summary */}
@@ -260,31 +266,36 @@ export function OpportunitiesList() {
             
             return (
               <Card key={opportunity.noticeId} className="hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg mb-2">
+                <CardHeader className="pb-3">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-base sm:text-lg mb-2 leading-tight">
                         <Link 
                           href={`/dashboard/opportunities/${opportunity.noticeId}`}
-                          className="hover:text-blue-600 transition-colors"
+                          className="hover:text-blue-600 transition-colors line-clamp-2"
                         >
                           {opportunity.title}
                         </Link>
                       </CardTitle>
-                      <CardDescription>
+                      <CardDescription className="text-sm">
                         {opportunity.department}
                         {opportunity.office && ` • ${opportunity.office}`}
                       </CardDescription>
                     </div>
                     
-                    <div className="flex flex-col items-end gap-2">
-                      <Badge className={getDeadlineColor(daysUntilDeadline)}>
+                    <div className="flex flex-row sm:flex-col items-start sm:items-end gap-2">
+                      <Badge className={`${getDeadlineColor(daysUntilDeadline)} text-xs`}>
                         <Clock className="mr-1 h-3 w-3" />
-                        {daysUntilDeadline > 0 ? `${daysUntilDeadline} days left` : "Expired"}
+                        <span className="hidden sm:inline">
+                          {daysUntilDeadline > 0 ? `${daysUntilDeadline} days left` : "Expired"}
+                        </span>
+                        <span className="sm:hidden">
+                          {daysUntilDeadline > 0 ? `${daysUntilDeadline}d` : "Exp"}
+                        </span>
                       </Badge>
                       
                       {opportunity.setAsideCode && (
-                        <Badge variant="outline">
+                        <Badge variant="outline" className="text-xs">
                           {opportunity.setAsideCode}
                         </Badge>
                       )}
@@ -292,7 +303,7 @@ export function OpportunitiesList() {
                   </div>
                 </CardHeader>
                 
-                <CardContent>
+                <CardContent className="pt-0">
                   <div className="space-y-3">
                     {opportunity.description && (
                       <p className="text-sm text-muted-foreground line-clamp-2">
@@ -300,41 +311,42 @@ export function OpportunitiesList() {
                       </p>
                     )}
                     
-                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs sm:text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">
-                        <Calendar className="h-4 w-4" />
-                        Posted: {formatDate(opportunity.postedDate)}
+                        <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                        <span className="truncate">Posted: {formatDate(opportunity.postedDate)}</span>
                       </div>
                       
                       <div className="flex items-center gap-1">
-                        <Clock className="h-4 w-4" />
-                        Due: {formatDate(opportunity.responseDeadline)}
+                        <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                        <span className="truncate">Due: {formatDate(opportunity.responseDeadline)}</span>
                       </div>
                       
                       {opportunity.estimatedValue && (
                         <div className="flex items-center gap-1">
-                          <DollarSign className="h-4 w-4" />
-                          {formatCurrency(opportunity.estimatedValue)}
+                          <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                          <span className="truncate">{formatCurrency(opportunity.estimatedValue)}</span>
                         </div>
                       )}
                       
                       {opportunity.naicsCode && (
-                        <div>
-                          NAICS: {opportunity.naicsCode}
+                        <div className="flex items-center gap-1">
+                          <span className="truncate">NAICS: {opportunity.naicsCode}</span>
                         </div>
                       )}
                     </div>
                     
-                    <div className="flex justify-between items-center pt-2">
-                      <div className="text-xs text-muted-foreground">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pt-2">
+                      <div className="text-xs text-muted-foreground truncate">
                         {opportunity.solicitationNumber && (
                           <span>Solicitation: {opportunity.solicitationNumber}</span>
                         )}
                       </div>
                       
-                      <Link href={`/dashboard/opportunities/${opportunity.noticeId}`}>
-                        <Button size="sm">
-                          Analyze Opportunity
+                      <Link href={`/dashboard/opportunities/${opportunity.noticeId}`} className="w-full sm:w-auto">
+                        <Button size="sm" className="w-full sm:w-auto">
+                          <span className="sm:inline hidden">Analyze Opportunity</span>
+                          <span className="sm:hidden inline">Analyze</span>
                         </Button>
                       </Link>
                     </div>
