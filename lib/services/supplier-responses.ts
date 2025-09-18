@@ -491,3 +491,11 @@ export async function getResponsesByQuoteRequest(quoteRequestId: string): Promis
 export async function updateSupplierResponse(id: string, data: UpdateSupplierResponseData): Promise<boolean> {
   return await supplierResponseService.updateSupplierResponse(id, data);
 }
+
+export async function createSupplierResponse(data: CreateSupplierResponseData): Promise<string> {
+  return await supplierResponseService.createSupplierResponse(data);
+}
+
+export async function deleteSupplierResponse(id: string): Promise<boolean> {
+  return await supplierResponseService.deleteSupplierResponse(id);
+}

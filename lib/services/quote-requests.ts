@@ -7,7 +7,7 @@ import {
   suppliers,
   user
 } from '@/db/schema';
-import { eq, and, desc, asc, count, inArray, or, like, gte, lte } from 'drizzle-orm';
+import { eq, and, desc, asc, count, or, like, gte, lte } from 'drizzle-orm';
 import { nanoid } from 'nanoid';
 
 // TypeScript types for Quote Request System
@@ -465,4 +465,23 @@ export async function getQuoteRequestById(id: string): Promise<QuoteRequestWithD
 
 export async function createQuoteRequest(data: CreateQuoteRequestData): Promise<string> {
   return await quoteRequestService.createQuoteRequest(data);
+}
+
+export async function updateQuoteRequest(id: string, data: UpdateQuoteRequestData): Promise<boolean> {
+  return await quoteRequestService.updateQuoteRequest(id, data);
+}
+
+export async function deleteQuoteRequest(id: string): Promise<boolean> {
+  return await quoteRequestService.deleteQuoteRequest(id);
+}
+
+export async function searchQuoteRequests(
+  filters: QuoteRequestFilters = {},
+  pagination: PaginationOptions = {}
+): Promise<{ data: Record<string, unknown>[]; total: number; page: number; limit: number }> {
+  return await quoteRequestService.listQuoteRequests(filters, pagination);
+}
+
+export async function getUserQuoteRequests(userId: string, status?: string): Promise<Record<string, unknown>[]> {
+  return await quoteRequestService.getQuoteRequestsByUser(userId, status);
 }
