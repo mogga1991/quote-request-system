@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { RefreshCw, Search, Filter, Calendar, DollarSign, Building, Clock } from "lucide-react";
+import { RefreshCw, Search, Filter, Calendar, DollarSign, Building, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 interface Opportunity {
@@ -176,24 +176,49 @@ export function OpportunitiesList() {
 
   return (
     <div className="space-y-6">
-      {/* Filters */}
+      {/* Mobile-First Search */}
       <div className="space-y-4">
-        {/* Search Bar */}
+        {/* Large Search Bar for Mobile */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
           <Input
-            placeholder="Search opportunities..."
+            placeholder="Search government opportunities..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-12 h-12 text-base rounded-xl border-2 focus:border-blue-500"
           />
         </div>
         
-        {/* Filter Row */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        {/* Mobile Filter Pills */}
+        <div className="lg:hidden">
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            <Button 
+              variant={departmentFilter === "all" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setDepartmentFilter("all")}
+              className="rounded-full whitespace-nowrap"
+            >
+              All Departments
+            </Button>
+            {departments.slice(0, 3).map((dept) => (
+              <Button
+                key={dept}
+                variant={departmentFilter === dept ? "default" : "outline"}
+                size="sm"
+                onClick={() => setDepartmentFilter(dept)}
+                className="rounded-full whitespace-nowrap"
+              >
+                {dept.split(' ')[0]}
+              </Button>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop Filters */}
+        <div className="hidden lg:flex gap-3">
           <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-            <SelectTrigger className="w-full sm:flex-1">
-              <Building className="mr-2 h-4 w-4 flex-shrink-0" />
+            <SelectTrigger className="w-64">
+              <Building className="mr-2 h-4 w-4" />
               <SelectValue placeholder="Filter by department" />
             </SelectTrigger>
             <SelectContent>
@@ -207,8 +232,8 @@ export function OpportunitiesList() {
           </Select>
 
           <Select value={naicsFilter} onValueChange={setNaicsFilter}>
-            <SelectTrigger className="w-full sm:flex-1">
-              <Filter className="mr-2 h-4 w-4 flex-shrink-0" />
+            <SelectTrigger className="w-48">
+              <Filter className="mr-2 h-4 w-4" />
               <SelectValue placeholder="Filter by NAICS" />
             </SelectTrigger>
             <SelectContent>
@@ -225,11 +250,9 @@ export function OpportunitiesList() {
             onClick={() => fetchOpportunities(true)} 
             disabled={refreshing}
             variant="outline"
-            className="w-full sm:w-auto"
           >
             <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
-            <span className="sm:inline hidden">{refreshing ? "Refreshing..." : "Refresh"}</span>
-            <span className="sm:hidden inline">{refreshing ? "..." : "Refresh"}</span>
+            {refreshing ? "Refreshing..." : "Refresh"}
           </Button>
         </div>
       </div>
@@ -265,94 +288,145 @@ export function OpportunitiesList() {
             const daysUntilDeadline = getDaysUntilDeadline(opportunity.responseDeadline);
             
             return (
-              <Card key={opportunity.noticeId} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
-                    <div className="flex-1 min-w-0">
-                      <CardTitle className="text-base sm:text-lg mb-2 leading-tight">
-                        <Link 
-                          href={`/dashboard/opportunities/${opportunity.noticeId}`}
-                          className="hover:text-blue-600 transition-colors line-clamp-2"
-                        >
-                          {opportunity.title}
-                        </Link>
-                      </CardTitle>
-                      <CardDescription className="text-sm">
-                        {opportunity.department}
-                        {opportunity.office && ` • ${opportunity.office}`}
-                      </CardDescription>
-                    </div>
-                    
-                    <div className="flex flex-row sm:flex-col items-start sm:items-end gap-2">
-                      <Badge className={`${getDeadlineColor(daysUntilDeadline)} text-xs`}>
-                        <Clock className="mr-1 h-3 w-3" />
-                        <span className="hidden sm:inline">
+              <div key={opportunity.noticeId}>
+                {/* Mobile Card Design */}
+                <div className="lg:hidden">
+                  <Link href={`/dashboard/opportunities/${opportunity.noticeId}`}>
+                    <Card className="p-4 hover:shadow-lg transition-all duration-200 active:scale-[0.98] border-l-4 border-l-blue-500">
+                      <div className="space-y-3">
+                        {/* Header with value and deadline */}
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              {opportunity.estimatedValue && (
+                                <Badge variant="secondary" className="bg-green-50 text-green-700 font-semibold">
+                                  {formatCurrency(opportunity.estimatedValue)}
+                                </Badge>
+                              )}
+                              <Badge className={`${getDeadlineColor(daysUntilDeadline)} text-xs font-medium`}>
+                                <Clock className="mr-1 h-3 w-3" />
+                                {daysUntilDeadline > 0 ? `${daysUntilDeadline}d left` : "Expired"}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Title */}
+                        <div>
+                          <h3 className="font-semibold text-base leading-tight mb-1 line-clamp-2">
+                            {opportunity.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 font-medium">
+                            {opportunity.department}
+                          </p>
+                        </div>
+
+                        {/* Description */}
+                        {opportunity.description && (
+                          <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+                            {opportunity.description}
+                          </p>
+                        )}
+
+                        {/* Footer Info */}
+                        <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                          <div className="text-xs text-gray-500">
+                            Due: {formatDate(opportunity.responseDeadline)}
+                          </div>
+                          <div className="flex items-center text-blue-600">
+                            <span className="text-sm font-medium">View Details</span>
+                            <ArrowRight className="ml-1 h-4 w-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </div>
+
+                {/* Desktop Card Design */}
+                <Card className="hidden lg:block hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-lg mb-2 leading-tight">
+                          <Link 
+                            href={`/dashboard/opportunities/${opportunity.noticeId}`}
+                            className="hover:text-blue-600 transition-colors line-clamp-2"
+                          >
+                            {opportunity.title}
+                          </Link>
+                        </CardTitle>
+                        <CardDescription className="text-sm">
+                          {opportunity.department}
+                          {opportunity.office && ` • ${opportunity.office}`}
+                        </CardDescription>
+                      </div>
+                      
+                      <div className="flex flex-col items-end gap-2">
+                        <Badge className={`${getDeadlineColor(daysUntilDeadline)} text-xs`}>
+                          <Clock className="mr-1 h-3 w-3" />
                           {daysUntilDeadline > 0 ? `${daysUntilDeadline} days left` : "Expired"}
-                        </span>
-                        <span className="sm:hidden">
-                          {daysUntilDeadline > 0 ? `${daysUntilDeadline}d` : "Exp"}
-                        </span>
-                      </Badge>
-                      
-                      {opportunity.setAsideCode && (
-                        <Badge variant="outline" className="text-xs">
-                          {opportunity.setAsideCode}
                         </Badge>
-                      )}
-                    </div>
-                  </div>
-                </CardHeader>
-                
-                <CardContent className="pt-0">
-                  <div className="space-y-3">
-                    {opportunity.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2">
-                        {opportunity.description}
-                      </p>
-                    )}
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs sm:text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                        <span className="truncate">Posted: {formatDate(opportunity.postedDate)}</span>
+                        
+                        {opportunity.setAsideCode && (
+                          <Badge variant="outline" className="text-xs">
+                            {opportunity.setAsideCode}
+                          </Badge>
+                        )}
                       </div>
-                      
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                        <span className="truncate">Due: {formatDate(opportunity.responseDeadline)}</span>
-                      </div>
-                      
-                      {opportunity.estimatedValue && (
-                        <div className="flex items-center gap-1">
-                          <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                          <span className="truncate">{formatCurrency(opportunity.estimatedValue)}</span>
-                        </div>
-                      )}
-                      
-                      {opportunity.naicsCode && (
-                        <div className="flex items-center gap-1">
-                          <span className="truncate">NAICS: {opportunity.naicsCode}</span>
-                        </div>
-                      )}
                     </div>
-                    
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pt-2">
-                      <div className="text-xs text-muted-foreground truncate">
-                        {opportunity.solicitationNumber && (
-                          <span>Solicitation: {opportunity.solicitationNumber}</span>
+                  </CardHeader>
+                  
+                  <CardContent className="pt-0">
+                    <div className="space-y-3">
+                      {opportunity.description && (
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {opportunity.description}
+                        </p>
+                      )}
+                      
+                      <div className="grid grid-cols-4 gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="h-4 w-4 flex-shrink-0" />
+                          <span className="truncate">Posted: {formatDate(opportunity.postedDate)}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-1">
+                          <Clock className="h-4 w-4 flex-shrink-0" />
+                          <span className="truncate">Due: {formatDate(opportunity.responseDeadline)}</span>
+                        </div>
+                        
+                        {opportunity.estimatedValue && (
+                          <div className="flex items-center gap-1">
+                            <DollarSign className="h-4 w-4 flex-shrink-0" />
+                            <span className="truncate">{formatCurrency(opportunity.estimatedValue)}</span>
+                          </div>
+                        )}
+                        
+                        {opportunity.naicsCode && (
+                          <div className="flex items-center gap-1">
+                            <span className="truncate">NAICS: {opportunity.naicsCode}</span>
+                          </div>
                         )}
                       </div>
                       
-                      <Link href={`/dashboard/opportunities/${opportunity.noticeId}`} className="w-full sm:w-auto">
-                        <Button size="sm" className="w-full sm:w-auto">
-                          <span className="sm:inline hidden">Analyze Opportunity</span>
-                          <span className="sm:hidden inline">Analyze</span>
-                        </Button>
-                      </Link>
+                      <div className="flex justify-between items-center pt-2">
+                        <div className="text-xs text-muted-foreground truncate">
+                          {opportunity.solicitationNumber && (
+                            <span>Solicitation: {opportunity.solicitationNumber}</span>
+                          )}
+                        </div>
+                        
+                        <Link href={`/dashboard/opportunities/${opportunity.noticeId}`}>
+                          <Button size="sm">
+                            Analyze Opportunity
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })
         )}

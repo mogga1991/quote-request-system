@@ -13,9 +13,10 @@ export default async function Dashboard() {
   }
 
   return (
-    <section className="flex flex-col items-start justify-start p-6 w-full">
-      <div className="w-full">
-        <div className="flex flex-col items-start justify-center gap-2 mb-6">
+    <div className="space-y-6">
+      {/* Desktop Header */}
+      <div className="hidden lg:block">
+        <div className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">
             Government Opportunities
           </h1>
@@ -23,8 +24,22 @@ export default async function Dashboard() {
             Discover and analyze federal contracting opportunities from SAM.gov.
           </p>
         </div>
-        <OpportunitiesList />
       </div>
-    </section>
+
+      {/* Mobile Header */}
+      <div className="lg:hidden">
+        <div className="space-y-2">
+          <h1 className="text-xl font-bold">
+            Opportunities
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Find government contracts
+          </p>
+        </div>
+      </div>
+
+      {/* Opportunities List */}
+      <OpportunitiesList />
+    </div>
   );
 }

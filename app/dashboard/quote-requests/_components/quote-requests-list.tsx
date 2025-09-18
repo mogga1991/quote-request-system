@@ -232,63 +232,123 @@ export function QuoteRequestsList({ userId }: QuoteRequestsListProps) {
             const deadlineInfo = getDeadlineStatus(quoteRequest.deadline);
             
             return (
-              <Card key={quoteRequest.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-3">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <CardTitle className="text-base sm:text-lg leading-tight">
-                        <Link 
-                          href={`/dashboard/quote-requests/${quoteRequest.id}`}
-                          className="hover:text-blue-600 transition-colors line-clamp-2"
+              <div key={quoteRequest.id}>
+                {/* Mobile Card Design */}
+                <div className="lg:hidden">
+                  <Link href={`/dashboard/quote-requests/${quoteRequest.id}`}>
+                    <Card className="p-4 hover:shadow-lg transition-all duration-200 active:scale-[0.98] border-l-4 border-l-purple-500">
+                      <div className="space-y-3">
+                        {/* Status and AI badges */}
+                        <div className="flex items-center gap-2">
+                          <Badge 
+                            className={`text-xs font-medium ${statusColors[quoteRequest.status]}`}
+                            variant="secondary"
+                          >
+                            {statusLabels[quoteRequest.status]}
+                          </Badge>
+                          {quoteRequest.aiGenerated && (
+                            <Badge variant="outline" className="text-xs border-blue-300 text-blue-700">
+                              AI Generated
+                            </Badge>
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <div>
+                          <h3 className="font-semibold text-base leading-tight mb-1 line-clamp-2">
+                            {quoteRequest.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 font-medium line-clamp-1">
+                            {quoteRequest.opportunityTitle}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {quoteRequest.opportunityDepartment}
+                          </p>
+                        </div>
+
+                        {/* Deadline Info */}
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-1">
+                            <CalendarIcon className="h-4 w-4 text-gray-400" />
+                            <span className={`text-sm font-medium ${deadlineInfo.color}`}>
+                              {deadlineInfo.text}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                          <div className="text-xs text-gray-500">
+                            Created {formatDistanceToNow(new Date(quoteRequest.createdAt), { addSuffix: true })}
+                          </div>
+                          <div className="flex items-center text-purple-600">
+                            <span className="text-sm font-medium">View Details</span>
+                            <ExternalLinkIcon className="ml-1 h-4 w-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </div>
+
+                {/* Desktop Card Design */}
+                <Card className="hidden lg:block hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex justify-between items-start gap-4">
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <CardTitle className="text-lg leading-tight">
+                          <Link 
+                            href={`/dashboard/quote-requests/${quoteRequest.id}`}
+                            className="hover:text-blue-600 transition-colors line-clamp-2"
+                          >
+                            {quoteRequest.title}
+                          </Link>
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground line-clamp-1">
+                          {quoteRequest.opportunityTitle} • {quoteRequest.opportunityDepartment}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        {quoteRequest.aiGenerated && (
+                          <Badge variant="secondary" className="text-xs">
+                            AI Generated
+                          </Badge>
+                        )}
+                        <Badge 
+                          className={`text-xs ${statusColors[quoteRequest.status]}`}
+                          variant="secondary"
                         >
-                          {quoteRequest.title}
-                        </Link>
-                      </CardTitle>
-                      <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">
-                        {quoteRequest.opportunityTitle} • {quoteRequest.opportunityDepartment}
-                      </p>
-                    </div>
-                    <div className="flex flex-row sm:flex-col items-start gap-2">
-                      {quoteRequest.aiGenerated && (
-                        <Badge variant="secondary" className="text-xs">
-                          AI Generated
+                          {statusLabels[quoteRequest.status]}
                         </Badge>
-                      )}
-                      <Badge 
-                        className={`text-xs ${statusColors[quoteRequest.status]}`}
-                        variant="secondary"
-                      >
-                        {statusLabels[quoteRequest.status]}
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <CalendarIcon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                        <span className={`${deadlineInfo.color} truncate`}>
-                          {deadlineInfo.text}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <ClockIcon className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                        <span className="truncate">
-                          Created {formatDistanceToNow(new Date(quoteRequest.createdAt), { addSuffix: true })}
-                        </span>
                       </div>
                     </div>
-                    <Link href={`/dashboard/quote-requests/${quoteRequest.id}`} className="w-full sm:w-auto">
-                      <Button variant="ghost" size="sm" className="w-full sm:w-auto">
-                        <span className="sm:inline hidden">View Details</span>
-                        <span className="sm:hidden inline">View</span>
-                        <ExternalLinkIcon className="h-4 w-4 ml-1" />
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex justify-between items-center">
+                      <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <CalendarIcon className="h-4 w-4 flex-shrink-0" />
+                          <span className={`${deadlineInfo.color} truncate`}>
+                            {deadlineInfo.text}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <ClockIcon className="h-4 w-4 flex-shrink-0" />
+                          <span className="truncate">
+                            Created {formatDistanceToNow(new Date(quoteRequest.createdAt), { addSuffix: true })}
+                          </span>
+                        </div>
+                      </div>
+                      <Link href={`/dashboard/quote-requests/${quoteRequest.id}`}>
+                        <Button variant="ghost" size="sm">
+                          View Details
+                          <ExternalLinkIcon className="h-4 w-4 ml-1" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             );
           })}
         </div>

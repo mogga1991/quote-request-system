@@ -18,90 +18,115 @@ import { ReactNode } from "react";
 
 export default function DashboardTopNav({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col">
-      <header className="flex h-14 lg:h-[52px] items-center gap-4 border-b px-3 sm:px-6">
+    <div className="flex flex-col h-screen">
+      {/* Mobile Header */}
+      <header className="flex h-16 items-center justify-between bg-white dark:bg-gray-900 border-b px-4 lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="min-[1024px]:hidden">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
+            <Button variant="ghost" size="lg" className="p-3">
+              <Menu className="h-6 w-6" />
+              <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
-            <SheetHeader>
-              <SheetTitle>
-                <Link prefetch={true} href="/" className="flex items-center font-semibold">
-                  GovBid AI
-                </Link>
-              </SheetTitle>
-            </SheetHeader>
-            <div className="flex flex-col space-y-3 mt-6">
-              <SheetClose asChild>
-                <Link prefetch={true} href="/dashboard">
-                  <Button variant="outline" className="w-full justify-start">
-                    <HomeIcon className="mr-2 h-4 w-4" />
-                    Opportunities
-                  </Button>
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link prefetch={true} href="/dashboard/quote-requests">
-                  <Button variant="outline" className="w-full justify-start">
-                    <FileText className="mr-2 h-4 w-4" />
-                    Quote Requests
-                  </Button>
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link prefetch={true} href="/dashboard/suppliers">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Building className="mr-2 h-4 w-4" />
-                    Suppliers
-                  </Button>
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link prefetch={true} href="/dashboard/search">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Search className="mr-2 h-4 w-4" />
-                    Advanced Search
-                  </Button>
-                </Link>
-              </SheetClose>
-              <SheetClose asChild>
-                <Link prefetch={true} href="/dashboard/analytics">
-                  <Button variant="outline" className="w-full justify-start">
-                    <TrendingUp className="mr-2 h-4 w-4" />
-                    Analytics
-                  </Button>
-                </Link>
-              </SheetClose>
-              <Separator className="my-3" />
-              <SheetClose asChild>
-                <Link prefetch={true} href="/dashboard/settings">
-                  <Button variant="outline" className="w-full justify-start">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </Button>
-                </Link>
-              </SheetClose>
+          <SheetContent side="left" className="w-full max-w-sm p-0">
+            <div className="flex flex-col h-full">
+              <SheetHeader className="p-6 pb-4">
+                <SheetTitle className="text-xl font-bold">
+                  <Link prefetch={true} href="/" className="flex items-center">
+                    GovBid AI
+                  </Link>
+                </SheetTitle>
+              </SheetHeader>
+              
+              <div className="flex-1 px-4 pb-6">
+                <div className="space-y-2">
+                  <SheetClose asChild>
+                    <Link prefetch={true} href="/dashboard" className="block">
+                      <div className="flex items-center p-4 rounded-xl bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-medium">
+                        <HomeIcon className="mr-3 h-5 w-5" />
+                        Opportunities
+                      </div>
+                    </Link>
+                  </SheetClose>
+                  
+                  <SheetClose asChild>
+                    <Link prefetch={true} href="/dashboard/quote-requests" className="block">
+                      <div className="flex items-center p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <FileText className="mr-3 h-5 w-5 text-gray-500" />
+                        Quote Requests
+                      </div>
+                    </Link>
+                  </SheetClose>
+                  
+                  <SheetClose asChild>
+                    <Link prefetch={true} href="/dashboard/suppliers" className="block">
+                      <div className="flex items-center p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <Building className="mr-3 h-5 w-5 text-gray-500" />
+                        Suppliers
+                      </div>
+                    </Link>
+                  </SheetClose>
+                  
+                  <SheetClose asChild>
+                    <Link prefetch={true} href="/dashboard/search" className="block">
+                      <div className="flex items-center p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <Search className="mr-3 h-5 w-5 text-gray-500" />
+                        Search
+                      </div>
+                    </Link>
+                  </SheetClose>
+                  
+                  <SheetClose asChild>
+                    <Link prefetch={true} href="/dashboard/analytics" className="block">
+                      <div className="flex items-center p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <TrendingUp className="mr-3 h-5 w-5 text-gray-500" />
+                        Analytics
+                      </div>
+                    </Link>
+                  </SheetClose>
+                </div>
+                
+                <div className="mt-8 pt-6 border-t space-y-2">
+                  <SheetClose asChild>
+                    <Link prefetch={true} href="/dashboard/settings" className="block">
+                      <div className="flex items-center p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        <Settings className="mr-3 h-5 w-5 text-gray-500" />
+                        Settings
+                      </div>
+                    </Link>
+                  </SheetClose>
+                </div>
+              </div>
+              
+              <div className="p-4 border-t">
+                <UserProfile mini={false} />
+              </div>
             </div>
           </SheetContent>
         </Sheet>
         
-        {/* Logo for mobile */}
-        <div className="flex items-center lg:hidden">
+        <div className="flex items-center font-bold text-lg">
+          GovBid AI
+        </div>
+        
+        <UserProfile mini={true} />
+      </header>
+
+      {/* Desktop Header */}
+      <header className="hidden lg:flex h-[52px] items-center gap-4 border-b px-6">
+        <div className="flex items-center">
           <Link prefetch={true} href="/" className="flex items-center font-semibold text-lg">
             GovBid AI
           </Link>
         </div>
-        
         <div className="flex justify-center items-center gap-2 ml-auto">
           <UserProfile mini={true} />
         </div>
       </header>
+
+      {/* Content */}
       <div className="flex-1 overflow-auto">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
           {children}
         </div>
       </div>
